@@ -1,0 +1,75 @@
+{
+    "paths": "/api/v1/positions",
+    "tags": [
+        "役職"
+    ],
+    "summary": "役職の作成",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の役職を新規作成します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+    "operationId": "create_position",
+    "requestBody": {
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/ApiV1PositionRequest"
+                }
+            }
+        }
+    },
+    "responses": {
+        "201": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1PositionResponse"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

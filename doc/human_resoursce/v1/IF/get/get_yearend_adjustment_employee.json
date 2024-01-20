@@ -1,0 +1,111 @@
+{
+    "paths": "/api/v1/yearend_adjustments/{year}/employees/{employee_id}",
+    "tags": [
+        "年末調整"
+    ],
+    "summary": "年末調整の取得",
+    "description": "指定した年、従業員IDの年末調整の詳細内容を返します。<br>\n年末調整対象外の従業員は、本人情報、給与・賞与、前職情報のみが取得できます。",
+    "operationId": "get_yearend_adjustment_employee",
+    "parameters": [
+        {
+            "name": "company_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            },
+            "description": "事業所ID"
+        },
+        {
+            "name": "year",
+            "in": "path",
+            "description": "年末調整を取得したい年",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 2000,
+                "maximum": 2100
+            }
+        },
+        {
+            "name": "employee_id",
+            "in": "path",
+            "description": "従業員ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        }
+    ],
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeeYearendAdjustmentController.show_response"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "404": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/notfoundError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

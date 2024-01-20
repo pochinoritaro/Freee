@@ -1,0 +1,115 @@
+{
+    "paths": "/api/v1/companies/{company_id}/employees",
+    "tags": [
+        "従業員"
+    ],
+    "summary": "全期間の従業員一覧の取得",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所に所属する従業員をリストで返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n  <li>退職ユーザーも含めて取得可能です。</li>\n</ul>",
+    "operationId": "get_company_employees",
+    "parameters": [
+        {
+            "name": "limit",
+            "in": "query",
+            "description": "取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)",
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "example": 50
+            }
+        },
+        {
+            "name": "offset",
+            "in": "query",
+            "description": "取得レコードのオフセット (デフォルト: 0)",
+            "schema": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2147483647,
+                "example": 0
+            }
+        },
+        {
+            "name": "company_id",
+            "in": "path",
+            "description": "事業所ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            },
+            "example": 1
+        },
+        {
+            "name": "with_no_payroll_calculation",
+            "in": "query",
+            "schema": {
+                "type": "boolean",
+                "default": false
+            },
+            "description": "trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。",
+            "example": true
+        }
+    ],
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ApiV1CompaniesEmployeeSerializer"
+                        }
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

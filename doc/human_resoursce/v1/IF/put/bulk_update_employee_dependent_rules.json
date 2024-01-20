@@ -1,0 +1,90 @@
+{
+    "paths": "/api/v1/employees/{employee_id}/dependent_rules/bulk_update",
+    "tags": [
+        "従業員の家族情報"
+    ],
+    "summary": "従業員の家族情報の更新",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の家族情報を更新します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>idがない場合は新規作成、destroyがtrueの場合は削除になります。</li>\n  <li>residence_type=live_in: 同居の場合、以下のパラメータに指定した値はWebに反映されません。</li>\n  <ul>\n    <li>zipcode1</li>\n    <li>zipcode2</li>\n    <li>prefecture_code</li>\n    <li>address</li>\n    <li>address_kana</li>\n    <li>annual_remittance_amount</li>\n  </ul>\n  <li>residence_type=non_resident: 別居(国外)の場合、以下のパラメータに指定した値はWebに反映されません。</li>\n  <ul>\n    <li>prefecture_code</li>\n  </ul>\n</ul>",
+    "operationId": "bulk_update_employee_dependent_rules",
+    "parameters": [
+        {
+            "name": "employee_id",
+            "in": "path",
+            "description": "従業員ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        }
+    ],
+    "requestBody": {
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/ApiV1EmployeesDependentRulesController.bulk_update_body"
+                }
+            }
+        },
+        "required": false
+    },
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeesDependentRulesController.bulk_update_response"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    },
+    "x-codegen-request-body-name": "body"
+}

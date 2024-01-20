@@ -1,0 +1,130 @@
+{
+    "paths": "/api/v1/employees/{employee_id}/time_clocks",
+    "tags": [
+        "タイムレコーダー(打刻)"
+    ],
+    "summary": "打刻一覧の取得",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員・期間の打刻情報を返します。</p>",
+    "operationId": "get_employee_time_clocks",
+    "parameters": [
+        {
+            "name": "company_id",
+            "in": "query",
+            "description": "事業所ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        },
+        {
+            "name": "from_date",
+            "in": "query",
+            "description": "取得する打刻期間の開始日(YYYY-MM-DD)(例:2018-08-01)(デフォルト: 当月の打刻開始日)",
+            "schema": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            }
+        },
+        {
+            "name": "to_date",
+            "in": "query",
+            "description": "取得する打刻期間の終了日(YYYY-MM-DD)(例:2018-08-31)(デフォルト: 当日)",
+            "schema": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            }
+        },
+        {
+            "name": "limit",
+            "in": "query",
+            "description": "取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)",
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+            }
+        },
+        {
+            "name": "offset",
+            "in": "query",
+            "description": "取得レコードのオフセット (デフォルト: 0)",
+            "schema": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2147483647
+            }
+        },
+        {
+            "name": "employee_id",
+            "in": "path",
+            "description": "従業員ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        }
+    ],
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeesTimeClocksController.index_response"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

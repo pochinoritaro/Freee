@@ -1,0 +1,111 @@
+{
+    "paths": "/api/v1/employees/{employee_id}/time_clocks/{id}",
+    "tags": [
+        "タイムレコーダー(打刻)"
+    ],
+    "summary": "打刻の取得",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員・指定した打刻の詳細情報を返します。</p>",
+    "operationId": "get_employee_time_clock",
+    "parameters": [
+        {
+            "name": "company_id",
+            "in": "query",
+            "description": "事業所ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        },
+        {
+            "name": "employee_id",
+            "in": "path",
+            "description": "従業員ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        },
+        {
+            "name": "id",
+            "in": "path",
+            "description": "打刻ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        }
+    ],
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeesTimeClocksController.show_response"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "404": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/notfoundError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

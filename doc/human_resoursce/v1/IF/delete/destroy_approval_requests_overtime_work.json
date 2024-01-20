@@ -1,0 +1,95 @@
+{
+    "paths": "/api/v1/approval_requests/overtime_works/{id}",
+    "tags": [
+        "残業申請"
+    ],
+    "summary": "残業申請の削除",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の残業申請情報を削除します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>申請経路、承認者の指定として部門役職データ連携を活用し、以下のいずれかを利用している申請と申請経路はAPI経由で参照は可能ですが、作成と更新、承認ステータスの変更ができません。</li>\n  <ul>\n    <li>役職指定（申請者の所属部門）</li>\n    <li>役職指定（申請時に部門指定）</li>\n    <li>部門および役職指定</li>\n  </ul>\n</ul>",
+    "operationId": "destroy_approval_requests_overtime_work",
+    "parameters": [
+        {
+            "name": "id",
+            "in": "path",
+            "description": "残業申請ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            },
+            "example": 1
+        },
+        {
+            "name": "company_id",
+            "in": "query",
+            "description": "事業所ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            },
+            "example": 1
+        }
+    ],
+    "responses": {
+        "204": {
+            "description": "successful operation"
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "404": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/notfoundError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

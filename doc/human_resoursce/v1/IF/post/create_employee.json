@@ -1,0 +1,77 @@
+{
+    "paths": "/api/v1/employees",
+    "tags": [
+        "従業員"
+    ],
+    "summary": "従業員の作成",
+    "description": "<h2 id=\"\">概要</h2>\n<p>従業員を新規作成します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+    "operationId": "create_employee",
+    "requestBody": {
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/ApiV1EmployeesController.create_body"
+                }
+            }
+        },
+        "required": false
+    },
+    "responses": {
+        "201": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeesController.create_response"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    },
+    "x-codegen-request-body-name": "body"
+}

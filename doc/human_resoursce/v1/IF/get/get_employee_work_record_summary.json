@@ -1,0 +1,123 @@
+{
+    "paths": "/api/v1/employees/{employee_id}/work_record_summaries/{year}/{month}",
+    "tags": [
+        "勤怠情報サマリ"
+    ],
+    "summary": "勤怠情報月次サマリの取得",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員、月の勤怠情報のサマリを返します。</p>\n<a href=\"https://developer.freee.co.jp/news/6774\" target=\"_blank\">API仕様の変更について</a>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>work_recordsオプションにtrueを指定することで、明細となる日次の勤怠情報もあわせて返却します。</li>\n</ul>",
+    "operationId": "get_employee_work_record_summary",
+    "parameters": [
+        {
+            "name": "company_id",
+            "in": "query",
+            "description": "事業所ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        },
+        {
+            "name": "work_records",
+            "in": "query",
+            "description": "サマリ情報に日次の勤怠情報を含める(true/false)(デフォルト: false)",
+            "schema": {
+                "type": "boolean"
+            }
+        },
+        {
+            "name": "employee_id",
+            "in": "path",
+            "description": "従業員ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647,
+                "example": 1
+            }
+        },
+        {
+            "name": "year",
+            "in": "path",
+            "description": "従業員情報を取得したい年",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 2000,
+                "maximum": 2100,
+                "example": 2021
+            }
+        },
+        {
+            "name": "month",
+            "in": "path",
+            "description": "従業員情報を取得したい月",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12,
+                "example": 1
+            }
+        }
+    ],
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeesWorkRecordSummarySerializer"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    }
+}

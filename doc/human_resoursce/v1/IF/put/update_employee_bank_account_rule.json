@@ -1,0 +1,90 @@
+{
+    "paths": "/api/v1/employees/{employee_id}/bank_account_rule",
+    "tags": [
+        "従業員の銀行口座"
+    ],
+    "summary": "従業員の銀行口座の更新",
+    "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の銀行口座1の情報を更新します。</p>",
+    "operationId": "update_employee_bank_account_rule",
+    "parameters": [
+        {
+            "name": "employee_id",
+            "in": "path",
+            "description": "従業員ID",
+            "required": true,
+            "schema": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+            }
+        }
+    ],
+    "requestBody": {
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/ApiV1EmployeesBankAccountRulesController.update_body"
+                }
+            }
+        },
+        "required": false
+    },
+    "responses": {
+        "200": {
+            "description": "successful operation",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ApiV1EmployeesBankAccountRulesController.update_response"
+                    }
+                }
+            }
+        },
+        "400": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/unauthorizedError"
+                    }
+                }
+            }
+        },
+        "403": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/forbiddenError"
+                    }
+                },
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/accessDeniedError"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "",
+            "content": {
+                "application/problem+json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/internalServerError"
+                    }
+                }
+            }
+        }
+    },
+    "x-codegen-request-body-name": "body"
+}
