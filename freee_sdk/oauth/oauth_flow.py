@@ -45,10 +45,14 @@ class OAuth:
 
 if __name__ == "__main__":
     from webbrowser import open as web_open
-    
-    CLIENT_ID = "2612398b54dd2a73d45b51c2fdf3b12360fcbb40d346d2f0bb04c34e7bb383ef"
-    CLIENT_SECRET = "f2b4272865b6fa0685f8ed0331bc9d2bd7e06a4c85eeb8a4d685bc4ab8bbd07b"
-    REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
+    import configparser
+    config = configparser.ConfigParser()
+
+    #設定ファイル読み込み
+    config.read("./doc/.ini")
+    CLIENT_ID = config["freee"]["CLIENT_ID"]
+    CLIENT_SECRET = config["freee"]["CLIENT_SECRET"]
+    REDIRECT_URI = config["freee"]["REDIRECT_URI"]
 
     oauth2_session = OAuth(
         client_id=CLIENT_ID,
