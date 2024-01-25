@@ -16,7 +16,7 @@ def create_headers(token: dict) -> dict:
 	access_token = token["access_token"]
 	return {
 		"accept": "application/json",
-		#"Content-Type": "application/json",
+		"Content-Type": "application/json",
 		"Authorization": f"Bearer {access_token}",
 		"FREEE-VERSION": "2022-02-01"
 		}

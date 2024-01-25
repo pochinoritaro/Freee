@@ -35,7 +35,7 @@ class BaseClient:
           self.token = token
         
         if company_id is not None:
-          default_params["company_id"] = company_id
+          self.default_params["company_id"] = company_id
         
     def api_call(
         self,
@@ -47,12 +47,16 @@ class BaseClient:
         endpoint_url: str
         ) -> FreeeResponse:
         api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
+        print(query)
         if query is not None:
-          api_url = _add_query(base_url=api_url, query=query)
+          query = _remove_none_values(query)
+          
         if body is not None:
-          body = dumps(_remove_none_values(body)).encode()
+          body = _remove_none_values(body)
+          
         if headers is None:
           headers = create_headers(self.token)
+          
         return self._urllib_api_send(
             method=method,
             headers=headers,
@@ -69,9 +73,9 @@ class BaseClient:
         method: str,
         endpoint_url: str
       ) -> FreeeResponse:
-        req = requests.request(method=method, url=endpoint_url, headers=headers)
+        req = requests.request(method=method, url=endpoint_url, headers=headers, data=body, params=query)
         return FreeeResponse(
-          client=self,
+          client=endpoint_url,
           http_verb=method,
           data=req
         ).varidate()

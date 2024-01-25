@@ -12,10 +12,9 @@ class FreeeResponse:
 			self._client = client
 			self.http_verb = http_verb
 			self.api_url = data.url
-			self.data = data.json()	
+			self.data = data.json()
 			self.status = data.status_code
-			print(self.status)
-			print(self.data)
+			self.error_format = f"url: {self.api_url}\nstatus: {self.status}\ndata: {self.data}"
 	
 	def __getitem__(self, item):
 		return self.data[item]
@@ -31,16 +30,16 @@ class FreeeResponse:
 			return self
 		
 		elif self.status == 400:
-			raise err.UnAuthorizedError
+			raise err.UnAuthorizedError(self.error_format)
 
 		elif self.status == 401:
-			raise err.AccessDeniedError
+			raise err.AccessDeniedError(self.error_format)
 
 		elif self.status == 403:
-			raise err.ForbiddenError
+			raise err.ForbiddenError(self.error_format)
 		
 		elif self.status == 404:
-			raise err.NotFoundError
+			raise err.NotFoundError(self.error_format)
 
 		elif self.status == 503:
-			raise err.InternalServerError
+			raise err.InternalServerError(self.error_format)
