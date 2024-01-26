@@ -113,25 +113,25 @@ class HumanResourse(BaseClient):
     def create_employee(
         self,
         employee_num: str=None,
-        working_hours_system_nqme: str=None,
+        working_hours_system_name: str=None,
         company_reference_date_rule_name: str=None,
-        pay_calc_type: str=None,
-        pay_amount: int=None,
         gender: str=None,
         married: bool=False,
-        no_payroll_caluclation: bool=False,
+        no_payroll_calculation: bool=False,
         *,
         company_id: int,
         first_name: str,
         last_name: str,
         first_name_kana: str,
         last_name_kana: str,
+        pay_amount: int,
         birth_date: str,
-        entry_date: str=None
+        entry_date: str=None,
+        pay_calc_type: str="monthly"
         ):
         employee_dict = dict(
             num=employee_num,
-            working_hours_system_nqme=working_hours_system_nqme,
+            working_hours_system_nqme=working_hours_system_name,
             company_reference_date_rule_name=company_reference_date_rule_name,
             first_name=first_name,
             last_name=last_name,
@@ -143,13 +143,12 @@ class HumanResourse(BaseClient):
             pay_amount=pay_amount,
             gender=gender,
             married=married,
-            no_payroll_caluclation=no_payroll_caluclation
+            no_payroll_calculation=no_payroll_calculation
         )
         request_body = dict(
             company_id=company_id,
             employee=_remove_none_values(employee_dict))
         endpoint_url = f"./employees"
-        print(request_body)
         return self.api_call(method="POST", endpoint_url=endpoint_url, body=request_body)
 
 
@@ -926,21 +925,26 @@ if __name__ == "__main__":
         redirect_uri=REDIRECT_URI
     )
     me = human_resourse.get_users_me()
-    print(me)
+    
     company_id = me["companies"][0]["id"]
     employees = human_resourse.get_company_employees(
         company_id=company_id
     )
     print(employees)
-    """
+    
     add_emploee = human_resourse.create_employee(
         company_id=company_id,
-        first_name="山田",
+        first_name="佐藤",
         last_name="太郎",
-        first_name_kana="ヤマダ",
+        first_name_kana="サトウ",
         last_name_kana="タロウ",
+        pay_amount=3,
         birth_date="1997-06-21",
-        entry_date="2024-01-28"
+        entry_date="2024-01-01"
     )
-    print(add_emploee)"""
+    print(add_emploee)
+    employees = human_resourse.get_company_employees(
+        company_id=company_id
+    )
+    print(employees)
 

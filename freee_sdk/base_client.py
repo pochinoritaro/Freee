@@ -47,12 +47,12 @@ class BaseClient:
         endpoint_url: str
         ) -> FreeeResponse:
         api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
-        print(query)
+        
         if query is not None:
           query = _remove_none_values(query)
           
         if body is not None:
-          body = _remove_none_values(body)
+          body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
           
         if headers is None:
           headers = create_headers(self.token)
@@ -73,12 +73,15 @@ class BaseClient:
         method: str,
         endpoint_url: str
       ) -> FreeeResponse:
-        req = requests.request(method=method, url=endpoint_url, headers=headers, data=body, params=query)
-        return FreeeResponse(
-          client=endpoint_url,
-          http_verb=method,
-          data=req
-        ).varidate()
+      print(f"url: {endpoint_url}\nbody: {body}\nquery: {query}")
+      
+      req = requests.request(method=method, url=endpoint_url, headers=headers, data=body, params=query)
+      req.raise_for_status()
+      return FreeeResponse(
+        client=endpoint_url,
+        http_verb=method,
+        data=req
+      ).varidate()
 
     def get_access_token(self):
         oauth2_session = OAuth(
@@ -93,9 +96,10 @@ class BaseClient:
         code = input('認可コードを入力: ')
         
         token = oauth2_session.generate_access_token(
-        oauth_sesion=session["session"],
+        oauth_session=session["session"],
         authorize_code=code
         )
+        print(token)
         return token
 
 

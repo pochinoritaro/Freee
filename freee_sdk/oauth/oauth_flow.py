@@ -34,10 +34,10 @@ class OAuth:
 
     def generate_access_token(
         self,
-        oauth_sesion: OAuth2Session.authorization_url,
+        oauth_session: OAuth2Session.authorization_url,
         authorize_code: str,
     ) -> dict:
-        return oauth_sesion.fetch_token(
+        return oauth_session.fetch_token(
             self.ACCESS_TOKEN_URL,
             client_secret=self.client_secret,
             code=authorize_code
