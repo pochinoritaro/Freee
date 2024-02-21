@@ -1,9 +1,9 @@
 from json import dumps
 import requests
 from .freee_response import FreeeResponse
-from Freee.freee_sdk.errors import UnAuthorizedError
-from Freee.freee_sdk.utils import _add_query, create_headers, _get_url, _remove_none_values
-from Freee.freee_sdk.oauth import OAuth
+from freee_sdk.errors import UnAuthorizedError
+from freee_sdk.utils import _add_query, create_headers, _get_url, _remove_none_values
+from freee_sdk.oauth import OAuth
 
 class BaseClient:
     BASE_URL = "https://api.freee.co.jp"
@@ -38,7 +38,7 @@ class BaseClient:
         self.oauth = OAuth
         
         if company_id is not None:
-          self.default_params["company_id"] = company_id
+            self.default_params["company_id"] = company_id
     
     @property
     def access_token(self):

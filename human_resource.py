@@ -1,5 +1,5 @@
-from Freee.freee_sdk import BaseClient
-from Freee.freee_sdk.utils import _remove_none_values
+from freee_sdk import BaseClient
+from freee_sdk.utils import _remove_none_values
 
 class HumanResourse(BaseClient):
     API_URL = "/hr/api/v1/"

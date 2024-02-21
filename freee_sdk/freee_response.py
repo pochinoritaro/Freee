@@ -1,4 +1,4 @@
-import Freee.freee_sdk.errors as err
+import freee_sdk.errors as err
 from requests import request
 
 class FreeeResponse:
