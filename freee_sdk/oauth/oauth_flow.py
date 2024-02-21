@@ -8,7 +8,6 @@
             access_token_refresh(staticmethod): トークンのリフレッシュ
 """
 from datetime import datetime, timedelta
-from os import getenv
 from urllib.parse import urljoin
 from requests import post
 from requests_oauthlib import OAuth2Session
@@ -136,6 +135,8 @@ class OAuth:
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
+    from os import getenv
+    
     load_dotenv("./docs/.env")
     
     auth_url = OAuth.get_auth_url(client_id=getenv("CLIENT_ID"), redirect_uri=getenv("REDIRECT_URI"))
