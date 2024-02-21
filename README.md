@@ -17,3 +17,17 @@ FreeeのAPIをPythonから扱えるようにするライブラリ
 ## 人事労務(HumanResource)
 [人事労務リファレンス](https://developer.freee.co.jp/reference/hr/reference)
 <br>本ライブラリで提供されている各種メソッドについては上記リファレンスを参照してください。
+'''from human_resource import HumanResourse
+
+config = ConfigParser()
+config.read("./doc/.ini")
+
+hr = HumanResourse(
+    client_id=config["freee"]["CLIENT_ID"],
+    client_secret=config["freee"]["CLIENT_SECRET"],
+    redirect_uri=config["freee"]["REDIRECT_URI"]
+    )
+
+hr.access_token = config["freee"]["ACCESS_TOKEN"]
+me = hr.get_users_me()
+print(me)'''
