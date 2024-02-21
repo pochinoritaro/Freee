@@ -27,7 +27,10 @@ hr = HumanResourse(
     redirect_uri=リダイレクト先
     )
 
+# アクセストークンを登録
 hr.access_token = アクセストークン
+
+# ログイン中のユーザが所属している事業所情報を取得
 me = hr.get_users_me()
 print(me)
 ```
