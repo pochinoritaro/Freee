@@ -16,3 +16,4 @@ FreeeのAPIをPythonから扱えるようにするライブラリ
 
 ## 人事労務(HumanResource)
 [人事労務リファレンス](https://developer.freee.co.jp/reference/hr/reference)
+本ライブラリで提供されている各種メソッドについては上記リファレンスを参照してください。
