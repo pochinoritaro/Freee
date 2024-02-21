@@ -1,30 +1,30 @@
-from freee_sdk import BaseClient
-from freee_sdk.utils import _remove_none_values
+from Freee.freee_sdk import BaseClient
+from Freee.freee_sdk.utils import _remove_none_values
 
 class HumanResourse(BaseClient):
     API_URL = "/hr/api/v1/"
 
     def update_employee_work_record(
         self,
-        clock_in_at: str=None,
-        clock_out_at: str=None,
-        day_pattern: str=None,
-        early_leaving_mins: int=None,
-        is_absence: bool=None,
-        lateness_mins: int=None,
-        normal_work_clock_in_at: str=None,
-        normal_work_clock_out_at: str=None,
-        normal_work_mins: int=None,
-        note: str=None,
-        paid_holiday: bool=None,
-        half_paid_holiday_mins: int=None,
-        hourly_paid_holiday_mins: int=None,
-        special_holiday: bool=None,
-        special_holiday_setting_id: int=None,
-        half_special_holiday_mins: int=None,
-        hourly_special_holiday_mins: int=None,
-        use_attendance_deduction: bool=None,
-        use_default_work_pattern: bool=None,
+        clock_in_at: str|None=None,
+        clock_out_at: str|None=None,
+        day_pattern: str|None=None,
+        early_leaving_mins: int|None=None,
+        is_absence: bool|None=None,
+        lateness_mins: int|None=None,
+        normal_work_clock_in_at: str|None=None,
+        normal_work_clock_out_at: str|None=None,
+        normal_work_mins: int|None=None,
+        note: str|None=None,
+        paid_holiday: bool|None=None,
+        half_paid_holiday_mins: int|None=None,
+        hourly_paid_holiday_mins: int|None=None,
+        special_holiday: bool|None=None,
+        special_holiday_setting_id: int|None=None,
+        half_special_holiday_mins: int|None=None,
+        hourly_special_holiday_mins: int|None=None,
+        use_attendance_deduction: bool|None=None,
+        use_default_work_pattern: bool|None=None,
         *,
         employee_id: int,
         date: int
@@ -101,8 +101,34 @@ class HumanResourse(BaseClient):
                     - normal_work_clock_out_at
                     - normal_work_mins
         """
+        #TODO JSON作成を見直す
+        break_records = dict(
+            clock_in_at=clock_in_at,
+            clock_out_at=clock_out_at
+            )
+        body = dict(
+            break_records=break_records,
+            day_pattern=day_pattern,
+            early_leaving_mins=early_leaving_mins,
+            is_absence=is_absence,
+            lateness_mins=lateness_mins,
+            normal_work_clock_in_at=normal_work_clock_in_at,
+            normal_work_clock_out_at=normal_work_clock_out_at,
+            normal_work_mins=normal_work_mins,
+            note=note,
+            paid_holiday=paid_holiday,
+            half_paid_holiday_mins=half_paid_holiday_mins,
+            hourly_paid_holiday_mins=hourly_paid_holiday_mins,
+            special_holiday=special_holiday,
+            special_holiday_setting_id=special_holiday_setting_id,
+            half_special_holiday_mins=half_special_holiday_mins,
+            hourly_special_holiday_mins=hourly_special_holiday_mins,
+            use_attendance_deduction=use_attendance_deduction,
+            use_default_work_pattern=use_default_work_pattern
+        )
+        print(body)
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
-        return self.api_call(method="PUT", endpoint_url=endpoint_url)
+        return self.api_call(method="PUT", endpoint_url=endpoint_url, body=body)
 
 
     def get_users_me(self):
@@ -112,21 +138,21 @@ class HumanResourse(BaseClient):
 
     def create_employee(
         self,
-        employee_num: str=None,
-        working_hours_system_name: str=None,
-        company_reference_date_rule_name: str=None,
-        gender: str=None,
-        married: bool=False,
-        no_payroll_calculation: bool=False,
+        employee_num: str|None=None,
+        working_hours_system_name: str|None=None,
+        company_reference_date_rule_name: str|None=None,
+        gender: str|None=None,
+        married: bool|None=None,
+        no_payroll_calculation: bool|None=None,
         *,
-        company_id: int,
+        #TODO company_id: int,
         first_name: str,
         last_name: str,
         first_name_kana: str,
         last_name_kana: str,
         pay_amount: int,
         birth_date: str,
-        entry_date: str=None,
+        entry_date: str|None=None,
         pay_calc_type: str="monthly"
         ):
         employee_dict = dict(
@@ -145,9 +171,8 @@ class HumanResourse(BaseClient):
             married=married,
             no_payroll_calculation=no_payroll_calculation
         )
-        request_body = dict(
-            company_id=company_id,
-            employee=_remove_none_values(employee_dict))
+
+        request_body = self.default_params|dict(employee=_remove_none_values(employee_dict))
         endpoint_url = f"./employees"
         return self.api_call(method="POST", endpoint_url=endpoint_url, body=request_body)
 
@@ -155,48 +180,35 @@ class HumanResourse(BaseClient):
     def get_approval_flow_route(
         self, 
         *, 
-        id: int|None=None, 
-        company_id: int|None=None
+        id: int|None=None
         ):
         endpoint_url = f"./approval_flow_routes/{id}"
-        query = dict(
-            id=id,
-            company_id=company_id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        query_param = self.default_params|dict(id=id)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
 
     def get_approval_flow_routes(
-        self, 
-        included_user_id: int|None=None, 
-        usage: str|None=None, 
-        *, 
-        company_id: int|None=None
+        self,
+        included_user_id: int|None=None,
+        usage: str|None=None,
         ):
         endpoint_url = f"./approval_flow_routes"
         query = dict(
-            company_id=company_id,
             included_user_id=included_user_id,
             usage=usage,
-        
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        query_param = self.default_params|_remove_none_values(query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
 
     def get_approval_requests_monthly_attendance(
         self, 
         *, 
-        company_id: int|None=None, 
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
-        query = dict(
-            company_id=company_id,
-            id=id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        query_param = self.default_params|dict(id=id)
+        return self.api_call(method="", endpoint_url=endpoint_url, query=query_param)
 
 
     def get_approval_requests_monthly_attendances(
@@ -476,17 +488,16 @@ class HumanResourse(BaseClient):
 
     def get_company_employees(
         self, 
-        limit: int|None=50, 
-        offset: int|None=0, 
-        with_no_payroll_calculation: bool|None=False, 
-        *, 
-        company_id: int|None=None
+        limit: int=50, 
+        offset: int=0, 
+        with_no_payroll_calculation: bool|None=None, 
+        #TODO *, 
+        #TODO company_id: int|None=None
         ):
-        endpoint_url = f"./companies/{company_id}/employees"
+        endpoint_url = f"./companies/{self.company_id}/employees"
         query = dict(
             limit=limit,
             offset=offset,
-            company_id=company_id,
             with_no_payroll_calculation=with_no_payroll_calculation,
         )
         
@@ -514,17 +525,17 @@ class HumanResourse(BaseClient):
 
     def get_employees(
         self, 
-        limit: int|None=None, 
-        offset: int|None=None, 
+        limit: int=50, 
+        offset: int=0, 
         with_no_payroll_calculation: bool|None=None, 
         *, 
-        company_id: int|None=None, 
+        #TODO company_id: int|None=None, 
         year: int|None=None, 
         month: int|None=None
         ):
         endpoint_url = f"./employees"
         query = dict(
-            company_id=company_id,
+            #TODO company_id=company_id,
             year=year,
             month=month,
             limit=limit,
@@ -532,7 +543,8 @@ class HumanResourse(BaseClient):
             with_no_payroll_calculation=with_no_payroll_calculation,
         
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        query_param = self.default_params|_remove_none_values(query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
 
     def get_employees_special_holidays(
@@ -799,12 +811,8 @@ class HumanResourse(BaseClient):
         query = dict(
             company_id=company_id,
             work_records=work_records,
-            employee_id=employee_id,
-            year=year,
-            month=month,
-        
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_groups(
@@ -930,9 +938,27 @@ if __name__ == "__main__":
     employees = human_resourse.get_company_employees(
         company_id=company_id
     )
-    print(employees)
+
+    for employee in employees:
+        user_id = employee["id"]
+        user_name = employee["display_name"]
+    print(f"id: {user_id}\nname: {user_name}")
+    work_summary = human_resourse.get_employee_work_record_summary(
+        company_id=company_id,
+        employee_id=user_id,
+        year=2024,
+        month=1
+    )
+    print(work_summary)
+
+    pd = human_resourse.update_employee_work_record(
+        paid_holiday=1,
+        employee_id=user_id,
+        date="2024-01-9"
+    )
+    print(pd)
     
-    add_emploee = human_resourse.create_employee(
+    """add_emploee = human_resourse.create_employee(
         company_id=company_id,
         first_name="佐藤",
         last_name="太郎",
@@ -946,5 +972,5 @@ if __name__ == "__main__":
     employees = human_resourse.get_company_employees(
         company_id=company_id
     )
-    print(employees)
+    print(employees)"""
 

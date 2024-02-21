@@ -12,8 +12,7 @@ def _add_query(
 	) -> str:
 		return "{}?{}".format(base_url, urlencode(query_param))
 
-def create_headers(token: dict) -> dict:
-	access_token = token["access_token"]
+def create_headers(access_token: dict) -> dict:
 	return {
 		"accept": "application/json",
 		"Content-Type": "application/json",
