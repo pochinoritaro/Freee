@@ -85,7 +85,7 @@ class BaseClient:
         authorization_url = self.oauth.get_auth_url(
             client_id=self.client_id,
             redirect_uri=self.redirect_uri
-            )
+        )
         return authorization_url
 
     def get_access_token(
@@ -137,11 +137,15 @@ class BaseClient:
         api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
         
         match method:
-            case "GET":
-                query = self.default_params|_remove_none_values(query)
+            case "GET"|"DELETE":
+                query = self.default_params|_remove_none_values(query) if query is not None else dict()
         
-        """if query is not None:
-        query = dumps(_remove_none_values(query), ensure_ascii=False)"""
+            case "POST"|"PUT":
+                body = self.default_params|_remove_none_values(body) if body is not None else dict()
+                body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
+        
+            case _:
+                raise TypeError
 
         if body is not None:
             body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
@@ -172,19 +176,19 @@ class BaseClient:
         print()
         
         req = requests.request(
-        method=method,
-        url=endpoint_url,
-        headers=headers,
-        data=body,
-        params=query  # 修正点: dictをparamsに渡す
+            method=method,
+            url=endpoint_url,
+            headers=headers,
+            data=body,
+            params=query  # 修正点: dictをparamsに渡す
         )
         
         req.raise_for_status()
         
         return FreeeResponse(
-        client=endpoint_url,
-        http_verb=method,
-        data=req
+            client=endpoint_url,
+            http_verb=method,
+            data=req
         ).varidate()
 
 
