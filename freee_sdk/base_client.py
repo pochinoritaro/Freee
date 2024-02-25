@@ -42,15 +42,15 @@ class BaseClient:
     
     @property
     def access_token(self):
-      return self.__access_token
+        return self.__access_token
 
     @access_token.setter
     def access_token(self, access_token):
         self.__access_token = access_token
-  
+
     @property
     def refresh_token(self):
-      return self.__refresh_token
+        return self.__refresh_token
 
     @refresh_token.setter
     def refresh_token(self, refresh_token):
@@ -58,7 +58,7 @@ class BaseClient:
 
     @property
     def token_create_at(self):
-      return self.__token_create_at
+        return self.__token_create_at
 
     @token_create_at.setter
     def token_create_at(self, token_create_at):
@@ -66,7 +66,7 @@ class BaseClient:
 
     @property
     def company_id(self):
-      return self.__company_id
+        return self.__company_id
 
     @company_id.setter
     def company_id(self, company_id):
@@ -136,46 +136,28 @@ class BaseClient:
         ) -> FreeeResponse:
         api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
         
+        match method:
+            case "GET":
+                query = self.default_params|_remove_none_values(query)
+        
         """if query is not None:
-          query = dumps(_remove_none_values(query), ensure_ascii=False)"""
-          
+        query = dumps(_remove_none_values(query), ensure_ascii=False)"""
+
         if body is not None:
-          body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
-          
-        if headers is None and self.token_create_at is not None:
-            #TODO 自動トークンリフレッシュ(再考の余地あり)
-            if not self.oauth.access_token_is_valid(token_create_at=self.token_create_at):
-                print("アクセストークンの期限切れ")
-                if not self.oauth.refresh__token_is_valid(token_create_at=self.token_create_at):
-                    print("アクセストークンのリフレッシュ")
-                    
-                    token_response = self.oauth.access_token_refresh(
-                        client_id=self.client_id,
-                        client_secret=self.client_secret,
-                        refresh_token=self.refresh_token
-                    )
-                    match token_response.status_code:
-                        case 200:
-                            response = token_response.json()
-                            #TODO アクセストークンとリフレッシュトークンのテーブルを分けてトークンローテに対応させる
-                            
-                            #TODO 再考の余地おおあり(クラス化)2024/02/08
-                            self.access_token = response["access_token"]
-                            self.refresh_token = response["refresh_token"]
-                            self.token_create_at = response["created_at"]
-                        
-                        case _:
-                            raise UnAuthorizedError
-        headers = create_headers(self.access_token)
+            body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
+
+        if headers is None:
+            headers = create_headers(self.access_token)
+        
         print(headers)
-          
+        
         return self._urllib_api_send(
             method=method,
             headers=headers,
             body=body,
             query=query,
             endpoint_url=api_url
-          )
+        )
 
     def _urllib_api_send(
         self,
@@ -185,23 +167,25 @@ class BaseClient:
         *,
         method: str,
         endpoint_url: str
-      ) -> FreeeResponse:
-      print(f"url: {endpoint_url}\nheader: {headers}\nbody: {body}\nquery: {query}[{type(query)}]")
-      print()
-      req = requests.request(
+        ) -> FreeeResponse:
+        print(f"url: {endpoint_url}\nheader: {headers}\nbody: {body}\nquery: {query}[{type(query)}]")
+        print()
+        
+        req = requests.request(
         method=method,
         url=endpoint_url,
         headers=headers,
         data=body,
         params=query  # 修正点: dictをparamsに渡す
-      )
-      #req = requests.request(method=method, url=endpoint_url, headers=headers, data=body, params=query)
-      req.raise_for_status()
-      return FreeeResponse(
+        )
+        
+        req.raise_for_status()
+        
+        return FreeeResponse(
         client=endpoint_url,
         http_verb=method,
         data=req
-      ).varidate()
+        ).varidate()
 
 
 if __name__ == "__main__":
