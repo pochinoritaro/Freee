@@ -186,7 +186,7 @@ class HumanResourse(BaseClient):
         query_param = self.default_params|dict(id=id)
         return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
-#TODO ここまで実装済(2024/02/22)
+#TODO 403エラーで動作確認はできていない(Web上で試しても同様)　2024/02/22
     def get_approval_flow_routes(
         self,
         included_user_id: int|None=None,
@@ -200,7 +200,7 @@ class HumanResourse(BaseClient):
         query_param = self.default_params|_remove_none_values(query)
         return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
-
+#TODO 403エラーで動作確認はできていない(Web上で試しても同様)　2024/02/22
     def get_approval_requests_monthly_attendance(
         self, 
         *, 
@@ -208,9 +208,9 @@ class HumanResourse(BaseClient):
         ):
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
         query_param = self.default_params|dict(id=id)
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query_param)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
-
+#TODO 403エラーで動作確認はできていない(Web上で試しても同様)　2024/02/22
     def get_approval_requests_monthly_attendances(
         self, 
         status: str|None=None, 
@@ -223,13 +223,10 @@ class HumanResourse(BaseClient):
         end_target_date: str|None=None, 
         passed_auto_check: bool|None=None, 
         limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None
+        offset: int|None=None
         ):
         endpoint_url = f"./approval_requests/monthly_attendances"
         query = dict(
-            company_id=company_id,
             status=status,
             application_number=application_number,
             start_issue_date=start_issue_date,
@@ -241,24 +238,24 @@ class HumanResourse(BaseClient):
             passed_auto_check=passed_auto_check,
             limit=limit,
             offset=offset,
-        
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        query_param = self.default_params|_remove_none_values(query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
 
 
+#TODO 403エラーで動作確認はできていない(Web上で試しても同様)　2024/02/22
     def get_approval_requests_overtime_work(
         self, 
         *, 
-        company_id: int|None=None, 
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/overtime_works/{id}"
         query = dict(
             company_id=company_id,
             id=id,
-        
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        query_param = self.default_params|_remove_none_values(query)
+        return self.api_call(method="", endpoint_url=endpoint_url, query=query_param)
 
 
     def get_approval_requests_overtime_works(

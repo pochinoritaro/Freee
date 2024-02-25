@@ -9,7 +9,8 @@ hr = HumanResourse(
     client_secret=config["freee"]["CLIENT_SECRET"],
     redirect_uri=config["freee"]["REDIRECT_URI"]
     )
-
 hr.access_token = config["freee"]["ACCESS_TOKEN"]
-me = hr.get_users_me()
-print(me)
+hr.company_id = hr.get_users_me()["companies"][0]["id"]
+
+
+print(hr.get_approval_requests_monthly_attendance(id=1))
