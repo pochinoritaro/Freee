@@ -1,7 +1,10 @@
 from urllib.parse import urljoin, urlencode
 
 def _remove_none_values(d: dict) -> dict:
-	return {k: v for k, v in d.items() if v is not  None}
+    if d is dict:
+        return {k: v for k, v in d.items() if v is not  None}
+    else:
+        return dict()
 
 def _get_url(base_url: str, endpoint_url: str) -> str:
 	return urljoin(base_url, endpoint_url)
