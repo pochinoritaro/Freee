@@ -9,8 +9,8 @@
 """
 from datetime import datetime, timedelta
 from urllib.parse import urljoin
-from requests import post
 from requests_oauthlib import OAuth2Session
+from freee_sdk.utils import request_urllib
 
 
 class OAuth:
@@ -81,7 +81,7 @@ class OAuth:
             "code": state,
             "redirect_uri": redirect_uri
             }
-        token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
+        token_response = request_urllib(OAuth.ACCESS_TOKEN_URL, data=header)
         return token_response
 
 
@@ -111,7 +111,7 @@ class OAuth:
             "client_secret": client_secret,
             "refresh_token": refresh_token
             }
-        token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
+        token_response = request_urllib(OAuth.ACCESS_TOKEN_URL, data=header)
         return token_response
 
     @staticmethod
