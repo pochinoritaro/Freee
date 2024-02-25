@@ -6,14 +6,13 @@ class FreeeResponse:
 			self,
 			*,
 			client,
-			http_verb: str,
-			data: request
+			response: request
 		) -> None:
 			self._client = client
-			self.http_verb = http_verb
-			self.api_url = data.url
-			self.data = data.json()
-			self.status = data.status_code
+			self.http_verb = response["http_verb"]
+			self.api_url = response["url"]
+			self.data = response["data"]
+			self.status = response["status_code"]
 			self.error_format = f"url: {self.api_url}\nstatus: {self.status}\ndata: {self.data}"
 	
 	def __getitem__(self, item):

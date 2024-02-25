@@ -1,8 +1,7 @@
 from json import dumps
-import requests
 from .freee_response import FreeeResponse
 from freee_sdk.errors import UnAuthorizedError
-from freee_sdk.utils import _add_query, create_headers, _get_url, _remove_none_values
+from freee_sdk.utils import create_headers, _get_url, _remove_none_values, request_urllib
 from freee_sdk.oauth import OAuth
 
 class BaseClient:
@@ -171,20 +170,16 @@ class BaseClient:
         print(f"url: {endpoint_url}\nheader: {headers}\nbody: {body}\nquery: {query}[{type(query)}]")
         print()
         
-        req = requests.request(
-        method=method,
-        url=endpoint_url,
-        headers=headers,
-        data=body,
-        params=query  # 修正点: dictをparamsに渡す
+        response = request_urllib(
+            url=endpoint_url,
+            headers=headers,
+            body=body,
+            query=query
         )
         
-        req.raise_for_status()
-        
         return FreeeResponse(
-        client=endpoint_url,
-        http_verb=method,
-        data=req
+            client=endpoint_url,
+            response=response
         ).varidate()
 
 
