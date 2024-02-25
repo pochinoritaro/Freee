@@ -134,10 +134,13 @@ class OAuth:
 
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
-    from os import getenv
+    from configparser import ConfigParser
+
+    config = ConfigParser()
+    config.read("./doc/.ini")
     
-    load_dotenv("./docs/.env")
-    
-    auth_url = OAuth.get_auth_url(client_id=getenv("CLIENT_ID"), redirect_uri=getenv("REDIRECT_URI"))
+    auth_url = OAuth.get_auth_url(
+        client_id=config["freee"]["CLIENT_ID"],
+        redirect_uri=config["freee"]["REDIRECT_URI"]
+    )
     print(auth_url)
