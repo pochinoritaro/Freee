@@ -138,7 +138,7 @@ class BaseClient:
         
         match method:
             case "GET"|"DELETE":
-                query = self.default_params|_remove_none_values(query) if query is not None else dict()
+                query = self.default_params|_remove_none_values(query) if query is not None else self.default_params
         
             case "POST"|"PUT":
                 body = self.default_params|_remove_none_values(body) if body is not None else dict()
