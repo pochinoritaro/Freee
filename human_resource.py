@@ -172,64 +172,58 @@ class HumanResourse(BaseClient):
             no_payroll_calculation=no_payroll_calculation
         )
 
-        request_body = self.default_params|dict(employee=_remove_none_values(employee_dict))
+        request_body = dict(employee=_remove_none_values(employee_dict))
         endpoint_url = f"./employees"
         return self.api_call(method="POST", endpoint_url=endpoint_url, body=request_body)
 
 
     def get_approval_flow_route(
-        self, 
-        *, 
+        self,
+        *,
         id: int|None=None
         ):
         endpoint_url = f"./approval_flow_routes/{id}"
-        query_param = self.default_params|dict(id=id)
-        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 #TODO ここまで実装済(2024/02/22)
     def get_approval_flow_routes(
         self,
         included_user_id: int|None=None,
-        usage: str|None=None,
+        usage: str|None=None
         ):
         endpoint_url = f"./approval_flow_routes"
         query = dict(
             included_user_id=included_user_id,
-            usage=usage,
+            usage=usage
         )
-        query_param = self.default_params|_remove_none_values(query)
-        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_approval_requests_monthly_attendance(
-        self, 
-        *, 
+        self,
+        *,
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
-        query_param = self.default_params|dict(id=id)
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query_param)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_approval_requests_monthly_attendances(
-        self, 
-        status: str|None=None, 
-        application_number: int|None=None, 
-        start_issue_date: str|None=None, 
-        end_issue_date: str|None=None, 
-        approver_id: int|None=None, 
-        applicant_id: int|None=None, 
-        start_target_date: str|None=None, 
-        end_target_date: str|None=None, 
-        passed_auto_check: bool|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None
+        self,
+        status: str|None=None,
+        application_number: int|None=None,
+        start_issue_date: str|None=None,
+        end_issue_date: str|None=None,
+        approver_id: int|None=None,
+        applicant_id: int|None=None,
+        start_target_date: str|None=None,
+        end_target_date: str|None=None,
+        passed_auto_check: bool|None=None,
+        limit: int|None=None,
+        offset: int|None=None
         ):
         endpoint_url = f"./approval_requests/monthly_attendances"
         query = dict(
-            company_id=company_id,
             status=status,
             application_number=application_number,
             start_issue_date=start_issue_date,
@@ -240,46 +234,36 @@ class HumanResourse(BaseClient):
             end_target_date=end_target_date,
             passed_auto_check=passed_auto_check,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_approval_requests_overtime_work(
-        self, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        *,
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/overtime_works/{id}"
-        query = dict(
-            company_id=company_id,
-            id=id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_approval_requests_overtime_works(
-        self, 
-        status: str|None=None, 
-        application_number: int|None=None, 
-        start_issue_date: str|None=None, 
-        end_issue_date: str|None=None, 
-        approver_id: int|None=None, 
-        applicant_id: int|None=None, 
-        start_target_date: str|None=None, 
-        end_target_date: str|None=None, 
-        passed_auto_check: bool|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None
+        self,
+        status: str|None=None,
+        application_number: int|None=None,
+        start_issue_date: str|None=None,
+        end_issue_date: str|None=None,
+        approver_id: int|None=None,
+        applicant_id: int|None=None,
+        start_target_date: str|None=None,
+        end_target_date: str|None=None,
+        passed_auto_check: bool|None=None,
+        limit: int|None=None,
+        offset: int|None=None
         ):
         endpoint_url = f"./approval_requests/overtime_works"
         query = dict(
-            company_id=company_id,
             status=status,
             application_number=application_number,
             start_issue_date=start_issue_date,
@@ -290,46 +274,36 @@ class HumanResourse(BaseClient):
             end_target_date=end_target_date,
             passed_auto_check=passed_auto_check,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_approval_requests_paid_holiday(
-        self, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        *,
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/paid_holidays/{id}"
-        query = dict(
-            company_id=company_id,
-            id=id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_approval_requests_paid_holidays(
-        self, 
-        status: str|None=None, 
-        application_number: int|None=None, 
-        start_issue_date: str|None=None, 
-        end_issue_date: str|None=None, 
-        approver_id: int|None=None, 
-        applicant_id: int|None=None, 
-        start_target_date: str|None=None, 
-        end_target_date: str|None=None, 
-        passed_auto_check: bool|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None
+        self,
+        status: str|None=None,
+        application_number: int|None=None,
+        start_issue_date: str|None=None,
+        end_issue_date: str|None=None,
+        approver_id: int|None=None,
+        applicant_id: int|None=None,
+        start_target_date: str|None=None,
+        end_target_date: str|None=None,
+        passed_auto_check: bool|None=None,
+        limit: int|None=None,
+        offset: int|None=None
         ):
         endpoint_url = f"./approval_requests/paid_holidays"
         query = dict(
-            company_id=company_id,
             status=status,
             application_number=application_number,
             start_issue_date=start_issue_date,
@@ -340,46 +314,36 @@ class HumanResourse(BaseClient):
             end_target_date=end_target_date,
             passed_auto_check=passed_auto_check,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_approval_requests_special_holiday(
-        self, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        *,
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/special_holidays/{id}"
-        query = dict(
-            company_id=company_id,
-            id=id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_approval_requests_special_holidays(
-        self, 
-        status: str|None=None, 
-        application_number: int|None=None, 
-        start_issue_date: str|None=None, 
-        end_issue_date: str|None=None, 
-        approver_id: int|None=None, 
-        applicant_id: int|None=None, 
-        start_target_date: str|None=None, 
-        end_target_date: str|None=None, 
-        passed_auto_check: bool|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None
+        self,
+        status: str|None=None,
+        application_number: int|None=None,
+        start_issue_date: str|None=None,
+        end_issue_date: str|None=None,
+        approver_id: int|None=None,
+        applicant_id: int|None=None,
+        start_target_date: str|None=None,
+        end_target_date: str|None=None,
+        passed_auto_check: bool|None=None,
+        limit: int|None=None,
+        offset: int|None=None
         ):
         endpoint_url = f"./approval_requests/special_holidays"
         query = dict(
-            company_id=company_id,
             status=status,
             application_number=application_number,
             start_issue_date=start_issue_date,
@@ -390,46 +354,36 @@ class HumanResourse(BaseClient):
             end_target_date=end_target_date,
             passed_auto_check=passed_auto_check,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_approval_requests_work_time(
-        self, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        *,
         id: int|None=None
         ):
         endpoint_url = f"./approval_requests/work_times/{id}"
-        query = dict(
-            company_id=company_id,
-            id=id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_approval_requests_work_times(
-        self, 
-        status: str|None=None, 
-        application_number: int|None=None, 
-        start_issue_date: str|None=None, 
-        end_issue_date: str|None=None, 
-        approver_id: int|None=None, 
-        applicant_id: int|None=None, 
-        start_target_date: str|None=None, 
-        end_target_date: str|None=None, 
-        passed_auto_check: bool|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None
+        self,
+        status: str|None=None,
+        application_number: int|None=None,
+        start_issue_date: str|None=None,
+        end_issue_date: str|None=None,
+        approver_id: int|None=None,
+        applicant_id: int|None=None,
+        start_target_date: str|None=None,
+        end_target_date: str|None=None,
+        passed_auto_check: bool|None=None,
+        limit: int|None=None,
+        offset: int|None=None
         ):
         endpoint_url = f"./approval_requests/work_times"
         query = dict(
-            company_id=company_id,
             status=status,
             application_number=application_number,
             start_issue_date=start_issue_date,
@@ -440,58 +394,50 @@ class HumanResourse(BaseClient):
             end_target_date=end_target_date,
             passed_auto_check=passed_auto_check,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_bonuses_employee_payroll_statement(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./bonuses/employee_payroll_statements/{employee_id}"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_bonuses_employee_payroll_statements(
-        self, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
+        self,
+        limit: int|None=None,
+        offset: int|None=None,
+        *,
+        year: int|None=None,
         month: int|None=None
         ):
         endpoint_url = f"./bonuses/employee_payroll_statements"
         query = dict(
-            company_id=company_id,
             year=year,
             month=month,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_company_employees(
-        self, 
+        self,
         limit: int=50, 
         offset: int=0, 
-        with_no_payroll_calculation: bool|None=None, 
-        #TODO *, 
+        with_no_payroll_calculation: bool|None=None,
+        #TODO *,
         #TODO company_id: int|None=None
         ):
         endpoint_url = f"./companies/{self.company_id}/employees"
@@ -500,421 +446,325 @@ class HumanResourse(BaseClient):
             offset=offset,
             with_no_payroll_calculation=with_no_payroll_calculation,
         )
-        
         return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         id: int|None=None
         ):
         endpoint_url = f"./employees/{id}"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            id=id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employees(
-        self, 
+        self,
         limit: int=50, 
         offset: int=0, 
-        with_no_payroll_calculation: bool|None=None, 
-        *, 
-        #TODO company_id: int|None=None, 
-        year: int|None=None, 
+        with_no_payroll_calculation: bool|None=None,
+        *,
+        year: int|None=None,
         month: int|None=None
         ):
         endpoint_url = f"./employees"
         query = dict(
-            #TODO company_id=company_id,
             year=year,
             month=month,
             limit=limit,
             offset=offset,
-            with_no_payroll_calculation=with_no_payroll_calculation,
-        
+            with_no_payroll_calculation=with_no_payroll_calculation
         )
-        query_param = self.default_params|_remove_none_values(query)
-        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query_param)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employees_special_holidays(
-        self, 
-        date: str|None=None, 
-        start_date: str|None=None, 
-        end_date: str|None=None, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        date: str|None=None,
+        start_date: str|None=None,
+        end_date: str|None=None,
+        *,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/special_holidays"
         query = dict(
-            company_id=company_id,
-            employee_id=employee_id,
             date=date,
             start_date=start_date,
-            end_date=end_date,
-        
+            end_date=end_date
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_bank_account_rule(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/bank_account_rule"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_basic_pay_rule(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/basic_pay_rule"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_dependent_rules(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/dependent_rules"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_group_memberships(
-        self, 
-        with_no_payroll_calculation: bool|None=None, 
-        employee_ids: str|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        with_no_payroll_calculation: bool|None=None,
+        employee_ids: str|None=None,
+        limit: int|None=None,
+        offset: int|None=None,
+        *,
         base_date: str|None=None
         ):
         endpoint_url = f"./employee_group_memberships"
         query = dict(
-            company_id=company_id,
             base_date=base_date,
             with_no_payroll_calculation=with_no_payroll_calculation,
             employee_ids=employee_ids,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_health_insurance_rule(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/health_insurance_rule"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_profile_custom_fields_rule(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/profile_custom_fields"
         query = dict(
-            company_id=company_id,
             year=year,
             month=month,
-            employee_id=employee_id,
-        
+            employee_id=employee_id
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_profile_rule(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/profile_rule"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_time_clock(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        employee_id: int|None=None, 
+        self,
+        *,
+        employee_id: int|None=None,
         id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/time_clocks/{id}"
-        query = dict(
-            company_id=company_id,
-            employee_id=employee_id,
-            id=id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_employee_time_clocks(
-        self, 
-        from_date: str|None=None, 
-        to_date: str|None=None, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        from_date: str|None=None,
+        to_date: str|None=None,
+        limit: int|None=None,
+        offset: int|None=None,
+        *,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/time_clocks"
         query = dict(
-            company_id=company_id,
             from_date=from_date,
             to_date=to_date,
             limit=limit,
-            offset=offset,
-            employee_id=employee_id,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_time_clocks_available_types(
-        self, 
-        date: str|None=None, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        date: str|None=None,
+        *,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/time_clocks/available_types"
         query = dict(
             company_id=company_id,
-            date=date,
-            employee_id=employee_id,
-        
+            date=date
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_welfare_pension_insurance_rule(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/welfare_pension_insurance_rule"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_employee_work_record(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        employee_id: int|None=None, 
+        self,
+        *,
+        employee_id: int|None=None,
         date: str|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
-        query = dict(
-            company_id=company_id,
-            employee_id=employee_id,
-            date=date,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_employee_work_record_summary(
-        self, 
-        work_records: bool|None=None, 
-        *, 
-        company_id: int|None=None, 
-        employee_id: int|None=None, 
-        year: int|None=None, 
+        self,
+        work_records: bool|None=None,
+        *,
+        employee_id: int|None=None,
+        year: int|None=None,
         month: int|None=None
         ):
         endpoint_url = f"./employees/{employee_id}/work_record_summaries/{year}/{month}"
         query = dict(
-            company_id=company_id,
             work_records=work_records,
         )
         return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
-    def get_groups(
-        self, 
-        *, 
-        company_id: int|None=None
-        ):
+    def get_groups(self):
         endpoint_url = f"./groups"
-        query = dict(
-            company_id=company_id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
-    def get_positions(
-        self, 
-        *, 
-        company_id: int|None=None
-        ):
+    def get_positions(self):
         endpoint_url = f"./positions"
-        query = dict(
-            company_id=company_id,
-        
-        )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_salaries_employee_payroll_statement(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
-        month: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
+        month: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./salaries/employee_payroll_statements/{employee_id}"
         query = dict(
-            company_id=company_id,
             year=year,
-            month=month,
-            employee_id=employee_id,
-        
+            month=month
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_salaries_employee_payroll_statements(
-        self, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
+        self,
+        limit: int|None=None,
+        offset: int|None=None,
+        *,
+        year: int|None=None,
         month: int|None=None
         ):
         endpoint_url = f"./salaries/employee_payroll_statements"
         query = dict(
-            company_id=company_id,
             year=year,
             month=month,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_yearend_adjustment_employee(
-        self, 
-        *, 
-        company_id: int|None=None, 
-        year: int|None=None, 
+        self,
+        *,
+        year: int|None=None,
         employee_id: int|None=None
         ):
         endpoint_url = f"./yearend_adjustments/{year}/employees/{employee_id}"
         query = dict(
-            company_id=company_id,
-            year=year,
-            employee_id=employee_id,
-        
+            year=year
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
     def get_yearend_adjustment_employees(
-        self, 
-        limit: int|None=None, 
-        offset: int|None=None, 
-        *, 
-        company_id: int|None=None, 
+        self,
+        limit: int|None=None,
+        offset: int|None=None,
+        *,
         year: int|None=None
         ):
         endpoint_url = f"./yearend_adjustments/{year}/employees"
         query = dict(
-            company_id=company_id,
             year=year,
             limit=limit,
-            offset=offset,
-        
+            offset=offset
         )
-        return self.api_call(method="", endpoint_url=endpoint_url, query=query)
+        return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
 if __name__ == "__main__":
