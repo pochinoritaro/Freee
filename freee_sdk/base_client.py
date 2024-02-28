@@ -182,9 +182,6 @@ class BaseClient:
             data=body,
             params=query  # 修正点: dictをparamsに渡す
         )
-        
-        req.raise_for_status()
-        
         return FreeeResponse(
             client=endpoint_url,
             http_verb=method,
