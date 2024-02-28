@@ -4,197 +4,10 @@ from freee_sdk.utils import _remove_none_values
 class HumanResourse(BaseClient):
     API_URL = "/hr/api/v1/"
 
-    def update_employee_work_record(
-        self,
-        clock_in_at: str|None=None,
-        clock_out_at: str|None=None,
-        day_pattern: str|None=None,
-        early_leaving_mins: int|None=None,
-        is_absence: bool|None=None,
-        lateness_mins: int|None=None,
-        normal_work_clock_in_at: str|None=None,
-        normal_work_clock_out_at: str|None=None,
-        normal_work_mins: int|None=None,
-        note: str|None=None,
-        paid_holiday: bool|None=None,
-        half_paid_holiday_mins: int|None=None,
-        hourly_paid_holiday_mins: int|None=None,
-        special_holiday: bool|None=None,
-        special_holiday_setting_id: int|None=None,
-        half_special_holiday_mins: int|None=None,
-        hourly_special_holiday_mins: int|None=None,
-        use_attendance_deduction: bool|None=None,
-        use_default_work_pattern: bool|None=None,
-        *,
-        employee_id: int,
-        date: int
-        ):
-        """
-        勤怠の更新\n
-        Args:
-            employee_id (int): 従業員ID
-            
-            date (int): 更新対象年月日(YYYY-MM-DD)
-            
-            clock_in_at (str, optional): 開始時刻. Defaults to None.
-            
-            clock_out_at (str, optional): 終了時刻. Defaults to None.
-            
-            day_pattern (WorkRecords.DayPttern, optional): 勤務パターン. Defaults to None.
-                prescribed_holiday、legal_holidayを指定すると、以下のパラメータについて、指定した値が反映されず無視されます。
-                    - early_leaving_mins
-                    - lateness_mins
-                    - paid_holiday
-            
-            early_leaving_mins (int, optional): 早退分の時間(分単位). Defaults to None.
-            
-            is_absence (bool, optional): 欠勤かどうか. Defaults to None.
-                trueを指定すると、以下のパラーメータについて、指定した値が反映されず無視されます。
-                    - break_records
-                    - clock_in_at
-                    - clock_out_at
-                    - clock_in_at
-                    - clock_out_at
-                    - early_leaving_mins
-                    - lateness_mins
-                    - normal_work_clock_in_at
-                    - normal_work_clock_out_at
-                    - normal_work_mins
-                    - normal_work_mins_by_paid_holiday
-                    - paid_holiday
-            
-            lateness_mins (int, optional): 遅刻分の時間. Defaults to None.
-            
-            normal_work_clock_in_at (str, optional): 所定労働開始時刻. Defaults to None.
-                指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
-            
-            normal_work_clock_out_at (str, optional): 所定労働終了時刻. Defaults to None.
-                指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
-            
-            normal_work_mins (int, optional): 所定労働時間. Defaults to None.
-                指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
-            
-            note (str, optional): 勤怠メモ. Defaults to None.
-            
-            paid_holiday (bool, optional): この日の有休取得日数。1日単位で指定します。. Defaults to None.
-            
-            half_paid_holiday_mins (int, optional): 有給休暇の半休を利用した時間(分単位). Defaults to None.
-            
-            hourly_paid_holiday_mins (int, optional): 有給休暇の時間休を利用した時間(分単位). Defaults to None.
-            
-            special_holiday (bool, optional): この日の特別休暇取得日数。1日単位で指定します。. Defaults to None.
-            
-            special_holiday_setting_id (int, optional): 特別休暇設定ID. Defaults to None.
-            
-            half_special_holiday_mins (int, optional): 特別休暇の半休を利用した時間(分単位). Defaults to None.
-            
-            hourly_special_holiday_mins (int, optional): 特別休暇の時間休を利用した時間(分単位). Defaults to None.
-            
-            use_attendance_deduction (bool, optional): 欠勤・遅刻・早退を控除対象時間に算入するかどうか. Defaults to None.
-            
-            use_default_work_pattern (bool, optional): デフォルトの勤務設定を使うかどうか. Defaults to None.
-                trueを指定した場合、以下のパラメータについて、指定した値に関係なく、従業員に設定した勤務賃金設定の休日の設定を参照して値が決まります
-                    - day_pattern
-                
-                trueを指定した場合、以下のパラメータについて、指定した値に関係なく、従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。
-                    - normal_work_clock_in_at
-                    - normal_work_clock_out_at
-                    - normal_work_mins
-        """
-        #TODO JSON作成を見直す
-        break_records = dict(
-            clock_in_at=clock_in_at,
-            clock_out_at=clock_out_at
-            )
-        body = dict(
-            break_records=break_records,
-            day_pattern=day_pattern,
-            early_leaving_mins=early_leaving_mins,
-            is_absence=is_absence,
-            lateness_mins=lateness_mins,
-            normal_work_clock_in_at=normal_work_clock_in_at,
-            normal_work_clock_out_at=normal_work_clock_out_at,
-            normal_work_mins=normal_work_mins,
-            note=note,
-            paid_holiday=paid_holiday,
-            half_paid_holiday_mins=half_paid_holiday_mins,
-            hourly_paid_holiday_mins=hourly_paid_holiday_mins,
-            special_holiday=special_holiday,
-            special_holiday_setting_id=special_holiday_setting_id,
-            half_special_holiday_mins=half_special_holiday_mins,
-            hourly_special_holiday_mins=hourly_special_holiday_mins,
-            use_attendance_deduction=use_attendance_deduction,
-            use_default_work_pattern=use_default_work_pattern
-        )
-        print(body)
-        endpoint_url = f"./employees/{employee_id}/work_records/{date}"
-        return self.api_call(method="PUT", endpoint_url=endpoint_url, body=body)
-
 
     def get_users_me(self):
         endpoint_url = f"./users/me"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
-
-
-    def create_employee(
-        self,
-        employee_num: str|None=None,
-        working_hours_system_name: str|None=None,
-        company_reference_date_rule_name: str|None=None,
-        gender: str|None=None,
-        married: bool|None=None,
-        no_payroll_calculation: bool|None=None,
-        *,
-        first_name: str,
-        last_name: str,
-        first_name_kana: str,
-        last_name_kana: str,
-        pay_amount: int,
-        birth_date: str,
-        entry_date: str|None=None,
-        pay_calc_type: str="monthly"
-        ):
-        """従業員を新規作成します。
-
-        Args:
-            first_name (str): _description_
-            last_name (str): _description_
-            first_name_kana (str): _description_
-            last_name_kana (str): _description_
-            pay_amount (int): _description_
-            birth_date (str): _description_
-            employee_num (str | None, optional): 従業員番号 Defaults to None.
-            working_hours_system_name (str | None, optional): 勤務・賃金設定名 で設定した名称を指定してください。Defaults to None.
-            company_reference_date_rule_name (str | None, optional): 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
-            - 未指定の際は、最初に登録したデータが利用されます。
-            - 入力パラメータのno_payroll_calculationがtrueの場合に指定するとエラーになります。 Defaults to None.
-            gender (str | None, optional): _description_. Defaults to None.
-            married (bool | None, optional): _description_. Defaults to None.
-            no_payroll_calculation (bool | None, optional): _description_. Defaults to None.
-            entry_date (str | None, optional): _description_. Defaults to None.
-            pay_calc_type (str, optional): _description_. Defaults to "monthly".
-
-        """
-        employee_dict = dict(
-            num=employee_num,
-            working_hours_system_nqme=working_hours_system_name,
-            company_reference_date_rule_name=company_reference_date_rule_name,
-            first_name=first_name,
-            last_name=last_name,
-            first_name_kana=first_name_kana,
-            last_name_kana=last_name_kana,
-            birth_date=birth_date,
-            entry_date=entry_date,
-            pay_calc_type=pay_calc_type,
-            pay_amount=pay_amount,
-            gender=gender,
-            married=married,
-            no_payroll_calculation=no_payroll_calculation
-        )
-
-        request_body = dict(employee=_remove_none_values(employee_dict))
-        endpoint_url = f"./employees"
-        return self.api_call(method="POST", endpoint_url=endpoint_url, body=request_body)
 
 
     def get_approval_flow_route(
@@ -773,44 +586,63 @@ class HumanResourse(BaseClient):
     # POSTメソッド
     def create_employee(
         self,
-        num: str|None=None,
+        employee_num: str|None=None,
         working_hours_system_name: str|None=None,
         company_reference_date_rule_name: str|None=None,
-        pay_calc_type: str|None=None,
-        pay_amount: int|None=None,
         gender: str|None=None,
         married: bool|None=None,
         no_payroll_calculation: bool|None=None,
         *,
-        last_name: str,
         first_name: str,
-        last_name_kana: str,
+        last_name: str,
         first_name_kana: str,
+        last_name_kana: str,
+        pay_amount: int,
         birth_date: str,
-        entry_date: str
+        entry_date: str|None=None,
+        pay_calc_type: str="monthly"
         ):
-        endpoint_url = f"./employees"
-        employee = dict(
-        num=num,
-        working_hours_system_name=working_hours_system_name,
-        company_reference_date_rule_name=company_reference_date_rule_name,
-        last_name=last_name,
-        first_name=first_name,
-        last_name_kana=last_name_kana,
-        first_name_kana=first_name_kana,
-        birth_date=birth_date,
-        entry_date=entry_date,
-        pay_calc_type=pay_calc_type,
-        pay_amount=pay_amount,
-        gender=gender,
-        married=married,
-        no_payroll_calculation=no_payroll_calculation
-        )
-        body = dict(
-            employee=employee
-            )
-        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+        """従業員を新規作成します。
 
+        Args:
+            first_name (str): _description_
+            last_name (str): _description_
+            first_name_kana (str): _description_
+            last_name_kana (str): _description_
+            pay_amount (int): _description_
+            birth_date (str): _description_
+            employee_num (str | None, optional): 従業員番号 Defaults to None.
+            working_hours_system_name (str | None, optional): 勤務・賃金設定名 で設定した名称を指定してください。Defaults to None.
+            company_reference_date_rule_name (str | None, optional): 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
+            - 未指定の際は、最初に登録したデータが利用されます。
+            - 入力パラメータのno_payroll_calculationがtrueの場合に指定するとエラーになります。 Defaults to None.
+            gender (str | None, optional): _description_. Defaults to None.
+            married (bool | None, optional): _description_. Defaults to None.
+            no_payroll_calculation (bool | None, optional): _description_. Defaults to None.
+            entry_date (str | None, optional): _description_. Defaults to None.
+            pay_calc_type (str, optional): _description_. Defaults to "monthly".
+
+        """
+        employee_dict = dict(
+            num=employee_num,
+            working_hours_system_nqme=working_hours_system_name,
+            company_reference_date_rule_name=company_reference_date_rule_name,
+            first_name=first_name,
+            last_name=last_name,
+            first_name_kana=first_name_kana,
+            last_name_kana=last_name_kana,
+            birth_date=birth_date,
+            entry_date=entry_date,
+            pay_calc_type=pay_calc_type,
+            pay_amount=pay_amount,
+            gender=gender,
+            married=married,
+            no_payroll_calculation=no_payroll_calculation
+        )
+
+        request_body = dict(employee=_remove_none_values(employee_dict))
+        endpoint_url = f"./employees"
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=request_body)
 
     def create_employee_time_clock(
         self,
