@@ -145,7 +145,6 @@ class HumanResourse(BaseClient):
         married: bool|None=None,
         no_payroll_calculation: bool|None=None,
         *,
-        #TODO company_id: int,
         first_name: str,
         last_name: str,
         first_name_kana: str,
@@ -155,6 +154,27 @@ class HumanResourse(BaseClient):
         entry_date: str|None=None,
         pay_calc_type: str="monthly"
         ):
+        """従業員を新規作成します。
+
+        Args:
+            first_name (str): _description_
+            last_name (str): _description_
+            first_name_kana (str): _description_
+            last_name_kana (str): _description_
+            pay_amount (int): _description_
+            birth_date (str): _description_
+            employee_num (str | None, optional): 従業員番号 Defaults to None.
+            working_hours_system_name (str | None, optional): 勤務・賃金設定名 で設定した名称を指定してください。Defaults to None.
+            company_reference_date_rule_name (str | None, optional): 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
+            - 未指定の際は、最初に登録したデータが利用されます。
+            - 入力パラメータのno_payroll_calculationがtrueの場合に指定するとエラーになります。 Defaults to None.
+            gender (str | None, optional): _description_. Defaults to None.
+            married (bool | None, optional): _description_. Defaults to None.
+            no_payroll_calculation (bool | None, optional): _description_. Defaults to None.
+            entry_date (str | None, optional): _description_. Defaults to None.
+            pay_calc_type (str, optional): _description_. Defaults to "monthly".
+
+        """
         employee_dict = dict(
             num=employee_num,
             working_hours_system_nqme=working_hours_system_name,
@@ -749,6 +769,391 @@ class HumanResourse(BaseClient):
             year=year
         )
         return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
+
+
+    # POSTメソッド
+    def create_employee(
+        self,
+        num: str|None=None,
+        working_hours_system_name: str|None=None,
+        company_reference_date_rule_name: str|None=None,
+        pay_calc_type: str|None=None,
+        pay_amount: int|None=None,
+        gender: str|None=None,
+        married: bool|None=None,
+        no_payroll_calculation: bool|None=None,
+        *,
+        last_name: str,
+        first_name: str,
+        last_name_kana: str,
+        first_name_kana: str,
+        birth_date: str,
+        entry_date: str
+        ):
+        endpoint_url = f"./employees"
+        employee = dict(
+        num=num,
+        working_hours_system_name=working_hours_system_name,
+        company_reference_date_rule_name=company_reference_date_rule_name,
+        last_name=last_name,
+        first_name=first_name,
+        last_name_kana=last_name_kana,
+        first_name_kana=first_name_kana,
+        birth_date=birth_date,
+        entry_date=entry_date,
+        pay_calc_type=pay_calc_type,
+        pay_amount=pay_amount,
+        gender=gender,
+        married=married,
+        no_payroll_calculation=no_payroll_calculation
+        )
+        body = dict(
+            employee=employee
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_employee_time_clock(
+        self,
+        base_date: str|None=None,
+        datetime: str|None=None,
+        *,
+        employee_id: int,
+        type: str
+        ):
+        endpoint_url = f"./employees/{employee_id}/time_clocks"
+        
+        body = dict(
+            type=type,
+            base_date=base_date,
+            datetime=datetime
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_group(
+        self,
+        code: str|None=None,
+        parent_group_id: int|None=None,
+        *,
+        name: str
+        ):
+        endpoint_url = f"./groups"
+        group = dict(
+            code=code,
+            name=name,
+            parent_group_id=parent_group_id
+            )
+        body = dict(
+            group=group
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_position(
+        self,
+        code: str|None=None,
+        *,
+        name: str
+        ):
+        endpoint_url = f"./positions"
+        position = dict(
+        code=code,
+            name=name
+            )
+        body = dict(
+            position=position
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_approval_requests_monthly_attendance(
+        self,
+        approver_id: int|None=None,
+        *,
+        target_year: int,
+        target_month: int,
+        approval_flow_route_id: int
+        ):
+        endpoint_url = f"./approval_requests/monthly_attendances"
+        
+        body = dict(
+            target_year=target_year,
+            target_month=target_month,
+            approval_flow_route_id=approval_flow_route_id,
+            approver_id=approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def action_approval_requests_monthly_attendance(
+        self,
+        next_approver_id: int|None=None,
+        *,
+        id: int,
+        approval_action: str,
+        target_round: int,
+        target_step_id: int
+        ):
+        endpoint_url = f"./approval_requests/monthly_attendances/{id}/actions"
+        
+        body = dict(
+            approval_action=approval_action,
+            target_round=target_round,
+            target_step_id=target_step_id,
+            next_approver_id=next_approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_approval_requests_work_time(
+        self,
+        clear_work_time: bool|None=None,
+        clock_in_at: str|None=None,
+        clock_out_at: str|None=None,
+        lateness_mins: int|None=None,
+        early_leaving_mins: int|None=None,
+        comment: str|None=None,
+        approver_id: int|None=None,
+        *,
+        target_date: str,
+        approval_flow_route_id: int
+        ):
+        endpoint_url = f"./approval_requests/work_times"
+        break_records = dict(
+            clock_in_at=clock_in_at,
+            clock_out_at=clock_out_at
+            )
+        body = dict(
+            target_date=target_date,
+            clear_work_time=clear_work_time,
+            lateness_mins=lateness_mins,
+            early_leaving_mins=early_leaving_mins,
+            break_records=_remove_none_values(break_records),
+            comment=comment,
+            approval_flow_route_id=approval_flow_route_id,
+            approver_id=approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def action_approval_requests_work_time(
+        self,
+        next_approver_id: int|None=None,
+        *,
+        id: int,
+        approval_action: str,
+        target_round: int,
+        target_step_id: int
+        ):
+        endpoint_url = f"./approval_requests/work_times/{id}/actions"
+        
+        body = dict(
+            approval_action=approval_action,
+            target_round=target_round,
+            target_step_id=target_step_id,
+            next_approver_id=next_approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_approval_requests_paid_holiday(
+        self,
+        start_at: str|None=None,
+        end_at: str|None=None,
+        comment: str|None=None,
+        approver_id: int|None=None,
+        *,
+        target_date: str,
+        holiday_type: str,
+        approval_flow_route_id: int
+        ):
+        endpoint_url = f"./approval_requests/paid_holidays"
+        
+        body = dict(
+            target_date=target_date,
+            holiday_type=holiday_type,
+            start_at=start_at,
+            end_at=end_at,
+            comment=comment,
+            approval_flow_route_id=approval_flow_route_id,
+            approver_id=approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def action_approval_requests_paid_holiday(
+        self,
+        next_approver_id: int|None=None,
+        *,
+        id: int,
+        approval_action: str,
+        target_round: int,
+        target_step_id: int
+        ):
+        endpoint_url = f"./approval_requests/paid_holidays/{id}/actions"
+        
+        body = dict(
+            approval_action=approval_action,
+            target_round=target_round,
+            target_step_id=target_step_id,
+            next_approver_id=next_approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_approval_requests_special_holiday(
+        self,
+        start_at: str|None=None,
+        end_at: str|None=None,
+        comment: str|None=None,
+        approver_id: int|None=None,
+        *,
+        target_date: str,
+        special_holiday_setting_id: int,
+        holiday_type: str,
+        approval_flow_route_id: int
+        ):
+        endpoint_url = f"./approval_requests/special_holidays"
+        
+        body = dict(
+            target_date=target_date,
+            special_holiday_setting_id=special_holiday_setting_id,
+            holiday_type=holiday_type,
+            start_at=start_at,
+            end_at=end_at,
+            comment=comment,
+            approval_flow_route_id=approval_flow_route_id,
+            approver_id=approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def action_approval_requests_special_holiday(
+        self,
+        next_approver_id: int|None=None,
+        *,
+        id: int,
+        approval_action: str,
+        target_round: int,
+        target_step_id: int
+        ):
+        endpoint_url = f"./approval_requests/special_holidays/{id}/actions"
+        
+        body = dict(
+            approval_action=approval_action,
+            target_round=target_round,
+            target_step_id=target_step_id,
+            next_approver_id=next_approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def create_approval_requests_overtime_work(
+        self,
+        comment: str|None=None,
+        approver_id: int|None=None,
+        *,
+        target_date: str,
+        start_at: str,
+        end_at: str,
+        approval_flow_route_id: int
+        ):
+        endpoint_url = f"./approval_requests/overtime_works"
+        
+        body = dict(
+            target_date=target_date,
+            start_at=start_at,
+            end_at=end_at,
+            comment=comment,
+            approval_flow_route_id=approval_flow_route_id,
+            approver_id=approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def action_approval_requests_overtime_work(
+        self,
+        next_approver_id: int|None=None,
+        *,
+        id: int,
+        approval_action: str,
+        target_round: int,
+        target_step_id: int
+        ):
+        endpoint_url = f"./approval_requests/overtime_works/{id}/actions"
+        
+        body = dict(
+            approval_action=approval_action,
+            target_round=target_round,
+            target_step_id=target_step_id,
+            next_approver_id=next_approver_id
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def post_yearend_adjustment_insurances(
+        self,
+        company_name: str|None=None,
+        kind_of_purpose: str|None=None,
+        period: str|None=None,
+        policyholder_last_name: str|None=None,
+        policyholder_first_name: str|None=None,
+        recipient_last_name: str|None=None,
+        recipient_first_name: str|None=None,
+        recipient_relationship: str|None=None,
+        payment_start_date: str|None=None,
+        *,
+        year: int,
+        employee_id: int,
+        type: str,
+        category: str,
+        new_or_old: str,
+        amount: int
+        ):
+        endpoint_url = f"./yearend_adjustments/{year}/insurances/{employee_id}"
+        insurance = dict(
+            type=type,
+            category=category,
+            new_or_old=new_or_old,
+            company_name=company_name,
+            kind_of_purpose=kind_of_purpose,
+            period=period,
+            policyholder_last_name=policyholder_last_name,
+            policyholder_first_name=policyholder_first_name,
+            recipient_last_name=recipient_last_name,
+            recipient_first_name=recipient_first_name,
+            recipient_relationship=recipient_relationship,
+            payment_start_date=payment_start_date,
+            amount=amount
+            )
+        body = dict(
+            insurance=insurance
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
+
+
+    def post_yearend_adjustment_housing_loan(
+        self,
+        *,
+        year: int,
+        employee_id: int,
+        residence_start_date: str,
+        remaining_balance_at_yearend: int,
+        category: str,
+        specific_case_type: str
+        ):
+        endpoint_url = f"./yearend_adjustments/{year}/housing_loans/{employee_id}"
+        housing_loan = dict(
+            residence_start_date=residence_start_date,
+            remaining_balance_at_yearend=remaining_balance_at_yearend,
+            category=category,
+            specific_case_type=specific_case_type
+            )
+        body = dict(
+            housing_loan=housing_loan
+            )
+        return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
 
 
     def get_yearend_adjustment_employees(
