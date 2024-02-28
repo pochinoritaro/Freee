@@ -2,7 +2,7 @@ from json import dumps
 import requests
 from .freee_response import FreeeResponse
 from freee_sdk.errors import UnAuthorizedError
-from freee_sdk.utils import _add_query, create_headers, _get_url, _remove_none_values
+from freee_sdk.utils import create_headers, _get_url, _remove_none_values
 from freee_sdk.oauth import OAuth
 
 class BaseClient:
@@ -22,15 +22,12 @@ class BaseClient:
     ):
         self.request_url = _get_url(base_url=self.BASE_URL, endpoint_url=self.API_URL)
         self.default_params = dict()
-        
         self.headers = headers or dict()
-        
         self.__access_token = access_token
         self.__refresh_token = refresh_token
         self.__token_create_at = token_create_at
         self.__company_id = company_id
 
-        
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
@@ -41,35 +38,35 @@ class BaseClient:
             self.default_params["company_id"] = company_id
     
     @property
-    def access_token(self):
+    def access_token(self) -> str:
         return self.__access_token
 
     @access_token.setter
-    def access_token(self, access_token):
+    def access_token(self, access_token: str):
         self.__access_token = access_token
 
     @property
-    def refresh_token(self):
+    def refresh_token(self) -> str:
         return self.__refresh_token
 
     @refresh_token.setter
-    def refresh_token(self, refresh_token):
+    def refresh_token(self, refresh_token: str):
         self.__refresh_token = refresh_token
 
     @property
-    def token_create_at(self):
+    def token_create_at(self) -> str:
         return self.__token_create_at
 
     @token_create_at.setter
-    def token_create_at(self, token_create_at):
+    def token_create_at(self, token_create_at: str):
         self.__token_create_at = token_create_at
 
     @property
-    def company_id(self):
+    def company_id(self) -> str:
         return self.__company_id
 
     @company_id.setter
-    def company_id(self, company_id):
+    def company_id(self, company_id: int):
         self.__company_id = company_id
         self.default_params["company_id"] = company_id
 
@@ -172,15 +169,14 @@ class BaseClient:
         method: str,
         endpoint_url: str
         ) -> FreeeResponse:
-        print(f"url: {endpoint_url}\nheader: {headers}\nbody: {body}\nquery: {query}[{type(query)}]")
-        print()
+        print(f"url: {endpoint_url}\nheader: {headers}\nbody: {body}\nquery: {query}[{type(query)}]\n")
         
         req = requests.request(
             method=method,
             url=endpoint_url,
             headers=headers,
             data=body,
-            params=query  # 修正点: dictをparamsに渡す
+            params=query
         )
         return FreeeResponse(
             client=endpoint_url,
