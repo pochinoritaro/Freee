@@ -1557,6 +1557,133 @@ class HumanResourse(BaseClient):
         return self.api_call(method="POST", endpoint_url=endpoint_url, body=body)
 
 
+    # DELETEメソッド
+    def destroy_employee(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./employees/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_employee_work_record(
+        self,
+        *,
+        employee_id: int,
+        date: str
+        ):
+        endpoint_url = f"./employees/{employee_id}/work_records/{date}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_group(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./groups/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_position(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./positions/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_approval_requests_monthly_attendance(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./approval_requests/monthly_attendances/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_approval_requests_work_time(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./approval_requests/work_times/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_approval_requests_paid_holiday(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./approval_requests/paid_holidays/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_approval_requests_special_holiday(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./approval_requests/special_holidays/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_approval_requests_overtime_work(
+        self,
+        *,
+        id: int
+        ):
+        endpoint_url = f"./approval_requests/overtime_works/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_yearend_adjustment_previous_job(
+        self,
+        *,
+        year: int,
+        employee_id: int
+        ):
+        endpoint_url = f"./yearend_adjustments/{year}/previous_jobs/{employee_id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_yearend_adjustment_insurances(
+        self,
+        *,
+        year: int,
+        employee_id: int,
+        id: int
+        ):
+        endpoint_url = f"./yearend_adjustments/{year}/insurances/{employee_id}/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
+    def destroy_yearend_adjustment_housing_loan(
+        self,
+        *,
+        year: int,
+        employee_id: int,
+        id: int
+        ):
+        endpoint_url = f"./yearend_adjustments/{year}/housing_loans/{employee_id}/{id}"
+        
+        return self.api_call(method="DELETE", endpoint_url=endpoint_url)
+
+
 if __name__ == "__main__":
     import configparser
     config = configparser.ConfigParser()
