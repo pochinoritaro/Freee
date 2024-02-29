@@ -149,9 +149,7 @@ class BaseClient:
 
         if headers is None:
             headers = create_headers(self.access_token)
-        
-        print(headers)
-        
+
         return self._urllib_api_send(
             method=method,
             headers=headers,
@@ -169,7 +167,7 @@ class BaseClient:
         method: str,
         endpoint_url: str
         ) -> FreeeResponse:
-        print(f"url: {endpoint_url}\nheader: {headers}\nbody: {body}\nquery: {query}[{type(query)}]\n")
+        print(f"url: {endpoint_url}")
         
         req = requests.request(
             method=method,
@@ -182,7 +180,7 @@ class BaseClient:
             client=endpoint_url,
             http_verb=method,
             data=req
-        ).varidate()
+        ).validate()
 
 
 if __name__ == "__main__":
