@@ -21,5 +21,9 @@ class NotFoundError(FreeeClientError):
     """リソースが存在しない"""
 
 
+class TooManyRequestsError(FreeeClientError):
+    """リクエスト回数制限を超えた"""
+
+
 class InternalServerError(FreeeClientError):
     """システム内で予期しないエラーが発生"""

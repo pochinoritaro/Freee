@@ -45,5 +45,8 @@ class FreeeResponse:
         elif self.status == 404:
             raise err.NotFoundError(self.__error_content(self.data))
 
+        elif self.status == 429:
+            raise err.TooManyRequestsError(self.__error_content(self.data))
+
         elif self.status == 503:
             raise err.InternalServerError(self.__error_content(self.data))
