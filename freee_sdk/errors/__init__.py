@@ -1,5 +1,5 @@
 class FreeeClientError(Exception):
-    def __init__(self, error):
+    def __init__(self, error: str=""):
         self.error = error
 
     def __str__(self):
