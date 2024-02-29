@@ -1,11 +1,12 @@
 from freee_sdk import BaseClient
+from freee_sdk.freee_response import FreeeResponse
 from freee_sdk.utils import _remove_none_values
 
 class HumanResourse(BaseClient):
     API_URL = "/hr/api/v1/"
 
 
-    def get_users_me(self):
+    def get_users_me(self) -> FreeeResponse:
         endpoint_url = f"./users/me"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -14,7 +15,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_flow_routes/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -23,7 +24,7 @@ class HumanResourse(BaseClient):
         self,
         included_user_id: int|None=None,
         usage: str|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_flow_routes"
         query = dict(
             included_user_id=included_user_id,
@@ -36,7 +37,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -54,7 +55,7 @@ class HumanResourse(BaseClient):
         passed_auto_check: bool|None=None,
         limit: int|None=None,
         offset: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/monthly_attendances"
         query = dict(
             status=status,
@@ -76,7 +77,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/overtime_works/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -94,7 +95,7 @@ class HumanResourse(BaseClient):
         passed_auto_check: bool|None=None,
         limit: int|None=None,
         offset: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/overtime_works"
         query = dict(
             status=status,
@@ -116,7 +117,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/paid_holidays/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -134,7 +135,7 @@ class HumanResourse(BaseClient):
         passed_auto_check: bool|None=None,
         limit: int|None=None,
         offset: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/paid_holidays"
         query = dict(
             status=status,
@@ -156,7 +157,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/special_holidays/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -174,7 +175,7 @@ class HumanResourse(BaseClient):
         passed_auto_check: bool|None=None,
         limit: int|None=None,
         offset: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/special_holidays"
         query = dict(
             status=status,
@@ -196,7 +197,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/work_times/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -214,7 +215,7 @@ class HumanResourse(BaseClient):
         passed_auto_check: bool|None=None,
         limit: int|None=None,
         offset: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/work_times"
         query = dict(
             status=status,
@@ -238,7 +239,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./bonuses/employee_payroll_statements/{employee_id}"
         query = dict(
             year=year,
@@ -254,7 +255,7 @@ class HumanResourse(BaseClient):
         *,
         year: int|None=None,
         month: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./bonuses/employee_payroll_statements"
         query = dict(
             year=year,
@@ -272,7 +273,7 @@ class HumanResourse(BaseClient):
         with_no_payroll_calculation: bool|None=None,
         #TODO *,
         #TODO company_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./companies/{self.company_id}/employees"
         query = dict(
             limit=limit,
@@ -288,7 +289,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{id}"
         query = dict(
             year=year,
@@ -305,7 +306,7 @@ class HumanResourse(BaseClient):
         *,
         year: int|None=None,
         month: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees"
         query = dict(
             year=year,
@@ -324,7 +325,7 @@ class HumanResourse(BaseClient):
         end_date: str|None=None,
         *,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/special_holidays"
         query = dict(
             date=date,
@@ -340,7 +341,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/bank_account_rule"
         query = dict(
             year=year,
@@ -355,7 +356,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/basic_pay_rule"
         query = dict(
             year=year,
@@ -370,7 +371,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/dependent_rules"
         query = dict(
             year=year,
@@ -387,7 +388,7 @@ class HumanResourse(BaseClient):
         offset: int|None=None,
         *,
         base_date: str|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employee_group_memberships"
         query = dict(
             base_date=base_date,
@@ -405,7 +406,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/health_insurance_rule"
         query = dict(
             year=year,
@@ -420,7 +421,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/profile_custom_fields"
         query = dict(
             year=year,
@@ -436,7 +437,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/profile_rule"
         query = dict(
             year=year,
@@ -450,7 +451,7 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int|None=None,
         id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/time_clocks/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -463,7 +464,7 @@ class HumanResourse(BaseClient):
         offset: int|None=None,
         *,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/time_clocks"
         query = dict(
             from_date=from_date,
@@ -479,7 +480,7 @@ class HumanResourse(BaseClient):
         date: str|None=None,
         *,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/time_clocks/available_types"
         query = dict(
             date=date
@@ -493,7 +494,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/welfare_pension_insurance_rule"
         query = dict(
             year=year,
@@ -507,7 +508,7 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int|None=None,
         date: str|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -519,7 +520,7 @@ class HumanResourse(BaseClient):
         employee_id: int|None=None,
         year: int|None=None,
         month: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/work_record_summaries/{year}/{month}"
         query = dict(
             work_records=work_records,
@@ -527,12 +528,12 @@ class HumanResourse(BaseClient):
         return self.api_call(method="GET", endpoint_url=endpoint_url, query=query)
 
 
-    def get_groups(self):
+    def get_groups(self) -> FreeeResponse:
         endpoint_url = f"./groups"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
-    def get_positions(self):
+    def get_positions(self) -> FreeeResponse:
         endpoint_url = f"./positions"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -543,7 +544,7 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./salaries/employee_payroll_statements/{employee_id}"
         query = dict(
             year=year,
@@ -559,7 +560,7 @@ class HumanResourse(BaseClient):
         *,
         year: int|None=None,
         month: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./salaries/employee_payroll_statements"
         query = dict(
             year=year,
@@ -575,7 +576,7 @@ class HumanResourse(BaseClient):
         *,
         year: int|None=None,
         employee_id: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/employees/{employee_id}"
         query = dict(
             year=year
@@ -601,26 +602,26 @@ class HumanResourse(BaseClient):
         birth_date: str,
         entry_date: str|None=None,
         pay_calc_type: str="monthly"
-        ):
+        ) -> FreeeResponse:
         """従業員を新規作成します。
 
         Args:
-            first_name (str): _description_
-            last_name (str): _description_
-            first_name_kana (str): _description_
-            last_name_kana (str): _description_
-            pay_amount (int): _description_
-            birth_date (str): _description_
-            employee_num (str | None, optional): 従業員番号 Defaults to None.
-            working_hours_system_name (str | None, optional): 勤務・賃金設定名 で設定した名称を指定してください。Defaults to None.
-            company_reference_date_rule_name (str | None, optional): 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
+            first_name (str) -> FreeeResponse: _description_
+            last_name (str) -> FreeeResponse: _description_
+            first_name_kana (str) -> FreeeResponse: _description_
+            last_name_kana (str) -> FreeeResponse: _description_
+            pay_amount (int) -> FreeeResponse: _description_
+            birth_date (str) -> FreeeResponse: _description_
+            employee_num (str | None, optional) -> FreeeResponse: 従業員番号 Defaults to None.
+            working_hours_system_name (str | None, optional) -> FreeeResponse: 勤務・賃金設定名 で設定した名称を指定してください。Defaults to None.
+            company_reference_date_rule_name (str | None, optional) -> FreeeResponse: 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
             - 未指定の際は、最初に登録したデータが利用されます。
             - 入力パラメータのno_payroll_calculationがtrueの場合に指定するとエラーになります。 Defaults to None.
-            gender (str | None, optional): _description_. Defaults to None.
-            married (bool | None, optional): _description_. Defaults to None.
-            no_payroll_calculation (bool | None, optional): _description_. Defaults to None.
-            entry_date (str | None, optional): _description_. Defaults to None.
-            pay_calc_type (str, optional): _description_. Defaults to "monthly".
+            gender (str | None, optional) -> FreeeResponse: _description_. Defaults to None.
+            married (bool | None, optional) -> FreeeResponse: _description_. Defaults to None.
+            no_payroll_calculation (bool | None, optional) -> FreeeResponse: _description_. Defaults to None.
+            entry_date (str | None, optional) -> FreeeResponse: _description_. Defaults to None.
+            pay_calc_type (str, optional) -> FreeeResponse: _description_. Defaults to "monthly".
 
         """
         employee_dict = dict(
@@ -651,7 +652,7 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int,
         type: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/time_clocks"
         
         body = dict(
@@ -668,7 +669,7 @@ class HumanResourse(BaseClient):
         parent_group_id: int|None=None,
         *,
         name: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./groups"
         group = dict(
             code=code,
@@ -686,7 +687,7 @@ class HumanResourse(BaseClient):
         code: str|None=None,
         *,
         name: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./positions"
         position = dict(
         code=code,
@@ -705,7 +706,7 @@ class HumanResourse(BaseClient):
         target_year: int,
         target_month: int,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/monthly_attendances"
         
         body = dict(
@@ -725,7 +726,7 @@ class HumanResourse(BaseClient):
         approval_action: str,
         target_round: int,
         target_step_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/monthly_attendances/{id}/actions"
         
         body = dict(
@@ -749,7 +750,7 @@ class HumanResourse(BaseClient):
         *,
         target_date: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/work_times"
         break_records = dict(
             clock_in_at=clock_in_at,
@@ -776,7 +777,7 @@ class HumanResourse(BaseClient):
         approval_action: str,
         target_round: int,
         target_step_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/work_times/{id}/actions"
         
         body = dict(
@@ -798,7 +799,7 @@ class HumanResourse(BaseClient):
         target_date: str,
         holiday_type: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/paid_holidays"
         
         body = dict(
@@ -821,7 +822,7 @@ class HumanResourse(BaseClient):
         approval_action: str,
         target_round: int,
         target_step_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/paid_holidays/{id}/actions"
         
         body = dict(
@@ -844,7 +845,7 @@ class HumanResourse(BaseClient):
         special_holiday_setting_id: int,
         holiday_type: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/special_holidays"
         
         body = dict(
@@ -868,7 +869,7 @@ class HumanResourse(BaseClient):
         approval_action: str,
         target_round: int,
         target_step_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/special_holidays/{id}/actions"
         
         body = dict(
@@ -889,7 +890,7 @@ class HumanResourse(BaseClient):
         start_at: str,
         end_at: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/overtime_works"
         
         body = dict(
@@ -911,7 +912,7 @@ class HumanResourse(BaseClient):
         approval_action: str,
         target_round: int,
         target_step_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/overtime_works/{id}/actions"
         
         body = dict(
@@ -941,7 +942,7 @@ class HumanResourse(BaseClient):
         category: str,
         new_or_old: str,
         amount: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/insurances/{employee_id}"
         insurance = dict(
             type=type,
@@ -973,7 +974,7 @@ class HumanResourse(BaseClient):
         remaining_balance_at_yearend: int,
         category: str,
         specific_case_type: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/housing_loans/{employee_id}"
         housing_loan = dict(
             residence_start_date=residence_start_date,
@@ -993,7 +994,7 @@ class HumanResourse(BaseClient):
         offset: int|None=None,
         *,
         year: int|None=None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/employees"
         query = dict(
             year=year,
@@ -1018,7 +1019,7 @@ class HumanResourse(BaseClient):
         id: int,
         birth_date: str,
         entry_date: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{id}"
         employee = dict(
             num=num,
@@ -1071,7 +1072,7 @@ class HumanResourse(BaseClient):
         first_name: str,
         last_name_kana: str,
         first_name_kana: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/profile_rule"
         employee_profile_rule = dict(
             last_name=last_name,
@@ -1117,21 +1118,21 @@ class HumanResourse(BaseClient):
         health_insurance_bonus_calc_type: str|None=None,
         manual_health_insurance_amount_of_employee_salary: int|None=None,
         manual_health_insurance_amount_of_employee_bonus: int|None=None,
-        manual_health_insurance_amount_of_company_salary: None|None=None,
-        manual_health_insurance_amount_of_company_bonus: None|None=None,
+        manual_health_insurance_amount_of_company_salary: int|None=None,
+        manual_health_insurance_amount_of_company_bonus: int|None=None,
         care_insurance_salary_calc_type: str|None=None,
         care_insurance_bonus_calc_type: str|None=None,
         manual_care_insurance_amount_of_employee_salary: int|None=None,
         manual_care_insurance_amount_of_employee_bonus: int|None=None,
-        manual_care_insurance_amount_of_company_salary: None|None=None,
-        manual_care_insurance_amount_of_company_bonus: None|None=None,
+        manual_care_insurance_amount_of_company_salary: int|None=None,
+        manual_care_insurance_amount_of_company_bonus: int|None=None,
         reference_num: str|None=None,
         *,
         employee_id: int,
         year: int,
         month: int,
         standard_monthly_remuneration: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/health_insurance_rule"
         employee_health_insurance_rule = dict(
             entried=entried,
@@ -1165,19 +1166,19 @@ class HumanResourse(BaseClient):
         welfare_pension_insurance_bonus_calc_type: str|None=None,
         manual_welfare_pension_insurance_amount_of_employee_salary: int|None=None,
         manual_welfare_pension_insurance_amount_of_employee_bonus: int|None=None,
-        manual_welfare_pension_insurance_amount_of_company_salary: None|None=None,
-        manual_welfare_pension_insurance_amount_of_company_bonus: None|None=None,
+        manual_welfare_pension_insurance_amount_of_company_salary: int|None=None,
+        manual_welfare_pension_insurance_amount_of_company_bonus: int|None=None,
         child_allowance_contribution_salary_calc_type: str|None=None,
         child_allowance_contribution_bonus_calc_type: str|None=None,
-        manual_child_allowance_contribution_amount_salary: None|None=None,
-        manual_child_allowance_contribution_amount_bonus: None|None=None,
+        manual_child_allowance_contribution_amount_salary: int|None=None,
+        manual_child_allowance_contribution_amount_bonus: int|None=None,
         reference_num: str|None=None,
         *,
         employee_id: int,
         year: int,
         month: int,
         standard_monthly_remuneration: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/welfare_pension_insurance_rule"
         employee_welfare_pension_insurance_rule = dict(
             entried=entried,
@@ -1209,7 +1210,7 @@ class HumanResourse(BaseClient):
         year: int,
         month: int,
         employee_dependent_rules: None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/dependent_rules/bulk_update"
         
         body = dict(
@@ -1235,7 +1236,7 @@ class HumanResourse(BaseClient):
         employee_id: int,
         year: int,
         month: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/bank_account_rule"
         employee_bank_account_rule = dict(
             bank_name=bank_name,
@@ -1264,7 +1265,7 @@ class HumanResourse(BaseClient):
         month: int,
         pay_calc_type: str,
         pay_amount: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/basic_pay_rule"
         employee_basic_pay_rule = dict(
             pay_calc_type=pay_calc_type,
@@ -1302,27 +1303,27 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int,
         date: int
-        ):
+        ) -> FreeeResponse:
         """
         勤怠の更新\n
         Args:
-            employee_id (int): 従業員ID
+            employee_id (int) -> FreeeResponse: 従業員ID
             
-            date (int): 更新対象年月日(YYYY-MM-DD)
+            date (int) -> FreeeResponse: 更新対象年月日(YYYY-MM-DD)
             
-            clock_in_at (str, optional): 開始時刻. Defaults to None.
+            clock_in_at (str, optional) -> FreeeResponse: 開始時刻. Defaults to None.
             
-            clock_out_at (str, optional): 終了時刻. Defaults to None.
+            clock_out_at (str, optional) -> FreeeResponse: 終了時刻. Defaults to None.
             
-            day_pattern (WorkRecords.DayPttern, optional): 勤務パターン. Defaults to None.
+            day_pattern (WorkRecords.DayPttern, optional) -> FreeeResponse: 勤務パターン. Defaults to None.
                 prescribed_holiday、legal_holidayを指定すると、以下のパラメータについて、指定した値が反映されず無視されます。
                     - early_leaving_mins
                     - lateness_mins
                     - paid_holiday
             
-            early_leaving_mins (int, optional): 早退分の時間(分単位). Defaults to None.
+            early_leaving_mins (int, optional) -> FreeeResponse: 早退分の時間(分単位). Defaults to None.
             
-            is_absence (bool, optional): 欠勤かどうか. Defaults to None.
+            is_absence (bool, optional) -> FreeeResponse: 欠勤かどうか. Defaults to None.
                 trueを指定すると、以下のパラーメータについて、指定した値が反映されず無視されます。
                     - break_records
                     - clock_in_at
@@ -1337,36 +1338,36 @@ class HumanResourse(BaseClient):
                     - normal_work_mins_by_paid_holiday
                     - paid_holiday
             
-            lateness_mins (int, optional): 遅刻分の時間. Defaults to None.
+            lateness_mins (int, optional) -> FreeeResponse: 遅刻分の時間. Defaults to None.
             
-            normal_work_clock_in_at (str, optional): 所定労働開始時刻. Defaults to None.
+            normal_work_clock_in_at (str, optional) -> FreeeResponse: 所定労働開始時刻. Defaults to None.
                 指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
             
-            normal_work_clock_out_at (str, optional): 所定労働終了時刻. Defaults to None.
+            normal_work_clock_out_at (str, optional) -> FreeeResponse: 所定労働終了時刻. Defaults to None.
                 指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
             
-            normal_work_mins (int, optional): 所定労働時間. Defaults to None.
+            normal_work_mins (int, optional) -> FreeeResponse: 所定労働時間. Defaults to None.
                 指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
             
-            note (str, optional): 勤怠メモ. Defaults to None.
+            note (str, optional) -> FreeeResponse: 勤怠メモ. Defaults to None.
             
-            paid_holiday (bool, optional): この日の有休取得日数。1日単位で指定します。. Defaults to None.
+            paid_holiday (bool, optional) -> FreeeResponse: この日の有休取得日数。1日単位で指定します。. Defaults to None.
             
-            half_paid_holiday_mins (int, optional): 有給休暇の半休を利用した時間(分単位). Defaults to None.
+            half_paid_holiday_mins (int, optional) -> FreeeResponse: 有給休暇の半休を利用した時間(分単位). Defaults to None.
             
-            hourly_paid_holiday_mins (int, optional): 有給休暇の時間休を利用した時間(分単位). Defaults to None.
+            hourly_paid_holiday_mins (int, optional) -> FreeeResponse: 有給休暇の時間休を利用した時間(分単位). Defaults to None.
             
-            special_holiday (bool, optional): この日の特別休暇取得日数。1日単位で指定します。. Defaults to None.
+            special_holiday (bool, optional) -> FreeeResponse: この日の特別休暇取得日数。1日単位で指定します。. Defaults to None.
             
-            special_holiday_setting_id (int, optional): 特別休暇設定ID. Defaults to None.
+            special_holiday_setting_id (int, optional) -> FreeeResponse: 特別休暇設定ID. Defaults to None.
             
-            half_special_holiday_mins (int, optional): 特別休暇の半休を利用した時間(分単位). Defaults to None.
+            half_special_holiday_mins (int, optional) -> FreeeResponse: 特別休暇の半休を利用した時間(分単位). Defaults to None.
             
-            hourly_special_holiday_mins (int, optional): 特別休暇の時間休を利用した時間(分単位). Defaults to None.
+            hourly_special_holiday_mins (int, optional) -> FreeeResponse: 特別休暇の時間休を利用した時間(分単位). Defaults to None.
             
-            use_attendance_deduction (bool, optional): 欠勤・遅刻・早退を控除対象時間に算入するかどうか. Defaults to None.
+            use_attendance_deduction (bool, optional) -> FreeeResponse: 欠勤・遅刻・早退を控除対象時間に算入するかどうか. Defaults to None.
             
-            use_default_work_pattern (bool, optional): デフォルトの勤務設定を使うかどうか. Defaults to None.
+            use_default_work_pattern (bool, optional) -> FreeeResponse: デフォルトの勤務設定を使うかどうか. Defaults to None.
                 trueを指定した場合、以下のパラメータについて、指定した値に関係なく、従業員に設定した勤務賃金設定の休日の設定を参照して値が決まります
                     - day_pattern
                 
@@ -1407,10 +1408,10 @@ class HumanResourse(BaseClient):
 
     def update_employee_work_record_summary(
         self,
-        work_days: None|None=None,
-        work_days_on_weekdays: None|None=None,
-        work_days_on_prescribed_holidays: None|None=None,
-        work_days_on_legal_holidays: None|None=None,
+        work_days: int|None=None,
+        work_days_on_weekdays: int|None=None,
+        work_days_on_prescribed_holidays: int|None=None,
+        work_days_on_legal_holidays: int|None=None,
         total_work_mins: int|None=None,
         total_normal_work_mins: int|None=None,
         total_excess_statutory_work_mins: int|None=None,
@@ -1418,13 +1419,13 @@ class HumanResourse(BaseClient):
         total_latenight_work_mins: int|None=None,
         total_actual_excess_statutory_work_mins: int|None=None,
         total_overtime_work_mins: int|None=None,
-        num_absences: None|None=None,
-        num_absences_for_deduction: None|None=None,
+        num_absences: int|None=None,
+        num_absences_for_deduction: int|None=None,
         total_lateness_mins: int|None=None,
         total_lateness_mins_for_deduction: int|None=None,
         total_early_leaving_mins: int|None=None,
         total_early_leaving_mins_for_deduction: int|None=None,
-        num_paid_holidays: None|None=None,
+        num_paid_holidays: int|None=None,
         total_shortage_work_mins: int|None=None,
         total_deemed_paid_excess_statutory_work_mins: int|None=None,
         total_deemed_paid_overtime_except_normal_work_mins: int|None=None,
@@ -1432,7 +1433,7 @@ class HumanResourse(BaseClient):
         employee_id: int,
         year: int,
         month: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/employees/{employee_id}/work_record_summaries/{year}/{month}"
         
         body = dict(
@@ -1467,7 +1468,7 @@ class HumanResourse(BaseClient):
         *,
         id: int,
         name: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/groups/{id}"
         group = dict(
         code=code,
@@ -1485,7 +1486,7 @@ class HumanResourse(BaseClient):
         *,
         id: int,
         name: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/positions/{id}"
         position = dict(
         code=code,
@@ -1503,7 +1504,7 @@ class HumanResourse(BaseClient):
         *,
         id: int,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/approval_requests/monthly_attendances/{id}"
         
         body = dict(
@@ -1520,16 +1521,18 @@ class HumanResourse(BaseClient):
         clock_out_at: str|None=None,
         lateness_mins: int|None=None,
         early_leaving_mins: int|None=None,
-        break_records: None|None=None,
         comment: str|None=None,
         approver_id: int|None=None,
         *,
         id: int,
         target_date: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/approval_requests/work_times/{id}"
-        
+        break_records = dict(
+            clock_in_at=clock_in_at,
+            clock_out_at=clock_out_at
+        )
         body = dict(
             target_date=target_date,
             clear_work_time=clear_work_time,
@@ -1556,7 +1559,7 @@ class HumanResourse(BaseClient):
         target_date: str,
         holiday_type: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/approval_requests/paid_holidays/{id}"
         
         body = dict(
@@ -1583,7 +1586,7 @@ class HumanResourse(BaseClient):
         special_holiday_setting_id: int,
         holiday_type: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/approval_requests/special_holidays/{id}"
         
         body = dict(
@@ -1609,7 +1612,7 @@ class HumanResourse(BaseClient):
         start_at: str,
         end_at: str,
         approval_flow_route_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/approval_requests/overtime_works/{id}"
         
         body = dict(
@@ -1647,7 +1650,7 @@ class HumanResourse(BaseClient):
         zipcode2: str,
         prefecture_code: int,
         address: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/employees/{employee_id}"
         employee = dict(
             last_name=last_name,
@@ -1687,7 +1690,7 @@ class HumanResourse(BaseClient):
         *,
         year: int,
         employee_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/payroll_and_bonus/{employee_id}"
         payroll_and_bonus = dict(
             unentered_payroll_amount=unentered_payroll_amount,
@@ -1709,7 +1712,7 @@ class HumanResourse(BaseClient):
         year: int,
         employee_id: int,
         dependents: None
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/dependents/{employee_id}"
         
         body = dict(
@@ -1729,7 +1732,7 @@ class HumanResourse(BaseClient):
         company_name: str,
         company_address: str,
         retire_date: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/previous_jobs/{employee_id}"
         previous_job = dict(
             income=income,
@@ -1764,7 +1767,7 @@ class HumanResourse(BaseClient):
         category: str,
         new_or_old: str,
         amount: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/insurances/{employee_id}/{id}"
         insurance = dict(
             type=type,
@@ -1793,7 +1796,7 @@ class HumanResourse(BaseClient):
         year: int,
         employee_id: int,
         housing_loan_deduction: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/housing_loan_deductions/{employee_id}"
         
         body = dict(
@@ -1812,7 +1815,7 @@ class HumanResourse(BaseClient):
         remaining_balance_at_yearend: int,
         category: str,
         specific_case_type: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"/api/v1/yearend_adjustments/{year}/housing_loans/{employee_id}/{id}"
         housing_loan = dict(
             residence_start_date=residence_start_date,
@@ -1831,7 +1834,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1842,7 +1845,7 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int,
         date: str
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1852,7 +1855,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./groups/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1862,7 +1865,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./positions/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1872,7 +1875,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1882,7 +1885,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/work_times/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1892,7 +1895,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/paid_holidays/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1902,7 +1905,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/special_holidays/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1912,7 +1915,7 @@ class HumanResourse(BaseClient):
         self,
         *,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./approval_requests/overtime_works/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1923,7 +1926,7 @@ class HumanResourse(BaseClient):
         *,
         year: int,
         employee_id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/previous_jobs/{employee_id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1935,7 +1938,7 @@ class HumanResourse(BaseClient):
         year: int,
         employee_id: int,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/insurances/{employee_id}/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -1947,7 +1950,7 @@ class HumanResourse(BaseClient):
         year: int,
         employee_id: int,
         id: int
-        ):
+        ) -> FreeeResponse:
         endpoint_url = f"./yearend_adjustments/{year}/housing_loans/{employee_id}/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)

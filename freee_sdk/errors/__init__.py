@@ -1,33 +1,29 @@
 class FreeeClientError(Exception):
-    def __init__(self, error):
+    def __init__(self, error: str=""):
         self.error = error
 
+    def __str__(self):
+        return f"{self.error}"
 
 class UnAuthorizedError(FreeeClientError):
-    """ログインをしてください。"""
-    def __str__(self):
-        return f"{self.arg}"
-
-
-class ForbiddenError(FreeeClientError):
-    """アクセス権限がありません。"""
-    def __str__(self):
-        return f"{self.arg}"
+    """リクエストパラメータが不正"""
 
 
 class AccessDeniedError(FreeeClientError):
-    """アクセスする権限がありません。"""
-    def __str__(self):
-        return f"{self.arg}"
+    """アクセストークンが無効"""
+
+
+class ForbiddenError(FreeeClientError):
+    """アクセス権限がない"""
 
 
 class NotFoundError(FreeeClientError):
-    """存在しないか既に削除されたレコードです。"""    
-    def __str__(self):
-        return f"{self.arg}"
+    """リソースが存在しない"""
+
+
+class TooManyRequestsError(FreeeClientError):
+    """リクエスト回数制限を超えた"""
 
 
 class InternalServerError(FreeeClientError):
-    """エラーが発生しました。再思考しても解消しない場合は、サポートセンターまでご連絡ください。"""
-    def __str__(self):
-        return f"{self.arg}"
+    """システム内で予期しないエラーが発生"""
