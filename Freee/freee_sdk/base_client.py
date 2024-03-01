@@ -1,9 +1,9 @@
 from json import dumps
 import requests
 from .freee_response import FreeeResponse
-from freee_sdk.errors import UnAuthorizedError
-from freee_sdk.utils import create_headers, _get_url, _remove_none_values
-from freee_sdk.oauth import OAuth
+from Freee.freee_sdk.errors import UnAuthorizedError
+from Freee.freee_sdk.utils import create_headers, _get_url, _remove_none_values
+from Freee.freee_sdk.oauth import OAuth
 
 class BaseClient:
     BASE_URL = "https://api.freee.co.jp"

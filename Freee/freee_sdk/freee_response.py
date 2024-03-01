@@ -1,5 +1,5 @@
-import freee_sdk.errors as err
-from requests import request, Response
+import Freee.freee_sdk.errors as err
+from requests import Response
 
 class FreeeResponse:
     def __init__(
