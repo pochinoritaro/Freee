@@ -48,12 +48,11 @@ class FreeeResponse:
         """_summary_
 
         Raises:
-            err.UnAuthorizedError: _description_
-            err.AccessDeniedError: _description_
-            err.ForbiddenError: _description_
-            err.NotFoundError: _description_
-            err.TooManyRequestsError: _description_
-            err.InternalServerError: _description_
+            err.AccessDeniedError: アクセストークンが無効の場合や、未ログインの場合に送出
+            err.ForbiddenError: アクセス権限がない場合に送出
+            err.NotFoundError: リソースが存在しない場合に送出
+            err.TooManyRequestsError: リクエスト回数制限を超えた場合に送出
+            err.InternalServerError: システム内で予期しないエラーが発生した場合に送出
 
         Returns:
             objrct: Freeeレスポンス
