@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from urllib.parse import urljoin
 from requests import post
 from requests_oauthlib import OAuth2Session
+from Freee.freee_sdk.freee_response import FreeeResponse
 from Freee.freee_sdk.errors import UnAuthorizedError, InternalServerError
 
 
@@ -67,7 +68,7 @@ class OAuth:
         self,
         *,
         state: str
-        ) -> dict|None:
+        ) -> FreeeResponse:
         #TODO エラーハンドリングを実装(2024/02/08)
         """アクセストークンの取得
         
@@ -90,16 +91,11 @@ class OAuth:
             "redirect_uri": self.redirect_uri
             }
         token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
-        match token_response.status_code:
-            case 200:
-                return token_response.json()
-            
-            case 401:
-                raise UnAuthorizedError
-
-            case _:
-                print(f"function: get_access_token\nstatus: {token_response.status_code}")
-                raise InternalServerError
+        return FreeeResponse(
+            client=self,
+            http_verb="POST",
+            data=token_response
+            ).validate()
 
 
     def access_token_refresh(
