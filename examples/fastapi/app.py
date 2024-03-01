@@ -9,9 +9,9 @@ PORT = 8000
 
 api = FastAPI()
 hr = HumanResourse(
-    client_id=クライアントID,
-    client_secret=シークレットID,
-    redirect_uri=リダイレクト先
+    client_id="client_id",
+    client_secret="client_secret",
+    redirect_uri="redirect_uri"
     )
 
 
