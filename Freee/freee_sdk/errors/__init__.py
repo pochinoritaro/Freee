@@ -5,8 +5,13 @@ class FreeeClientError(Exception):
     def __str__(self):
         return f"{self.error}"
 
-class UnAuthorizedError(FreeeClientError):
+
+class BadRequestError(FreeeClientError):
     """リクエストパラメータが不正"""
+
+
+class UnAuthorizedError(FreeeClientError):
+    """アクセストークンが無効"""
 
 
 class AccessDeniedError(FreeeClientError):

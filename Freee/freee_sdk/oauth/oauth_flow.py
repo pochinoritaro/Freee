@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from urllib.parse import urljoin
 from requests import post
 from requests_oauthlib import OAuth2Session
+from Freee.freee_sdk.freee_response import FreeeResponse
+from Freee.freee_sdk.errors import UnAuthorizedError, InternalServerError
 
 
 class OAuth:
@@ -30,8 +32,18 @@ class OAuth:
     ACCESS_TOKEN_URL = urljoin(__AUTH_URL_BASE, __ACCESS_TOKEN)
 
 
-    @staticmethod
-    def get_auth_url(*, client_id: str, redirect_uri: str) -> str|None:
+    def __init__(
+        self,
+        client_id: str=None,
+        client_secret: str=None,
+        redirect_uri: str=None
+        ) -> None:
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.redirect_uri = redirect_uri
+
+
+    def get_auth_url(self) -> str|None:
         #TODO エラーハンドリングを実装(2024/02/08)
         """認可コードの取得
         
@@ -45,21 +57,18 @@ class OAuth:
             str|None: 認可用URLを返却する。
         """
         oauth_session = OAuth2Session(
-            client_id=client_id,
-            redirect_uri=redirect_uri
+            client_id=self.client_id,
+            redirect_uri=self.redirect_uri
         )
         authorization_url, _ = oauth_session.authorization_url(OAuth.AUTH_CODE_URL)
         return authorization_url
 
 
-    @staticmethod
     def get_access_token(
+        self,
         *,
-        client_id: str,
-        client_secret: str,
-        redirect_uri: str,
         state: str
-        ) -> dict|None:
+        ) -> FreeeResponse:
         #TODO エラーハンドリングを実装(2024/02/08)
         """アクセストークンの取得
         
@@ -76,20 +85,22 @@ class OAuth:
         """
         header = {
             "grant_type": "authorization_code",
-            "client_id": client_id,
-            "client_secret": client_secret,
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
             "code": state,
-            "redirect_uri": redirect_uri
+            "redirect_uri": self.redirect_uri
             }
         token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
-        return token_response
+        return FreeeResponse(
+            client=self,
+            http_verb="POST",
+            data=token_response
+            ).validate()
 
 
-    @staticmethod
     def access_token_refresh(
+        self,
         *,
-        client_id: str,
-        client_secret: str,
         refresh_token: str
         ) -> dict|None:
         #TODO エラーハンドリングを実装(2024/02/08)
@@ -107,15 +118,14 @@ class OAuth:
         """
         header = {
             "grant_type": "refresh_token",
-            "client_id": client_id,
-            "client_secret": client_secret,
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
             "refresh_token": refresh_token
             }
         token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
         return token_response
 
-    @staticmethod
-    def access_token_is_valid(token_create_at: int) -> bool:
+    def access_token_is_valid(self, token_create_at: int) -> bool:
         token_spend_by_generated = datetime.now()-datetime.fromtimestamp(token_create_at)
         #TODO アクセストークン発行から6時間以上経過しているが、リフレッシュトークンが有効期限内だった場合の処理は?2024/02/08
         if abs(token_spend_by_generated) <= timedelta(hours=6):
@@ -123,24 +133,10 @@ class OAuth:
         else:
             return False
             
-    @staticmethod
-    def refresh__token_is_valid(token_create_at: int) -> bool:
+    def refresh__token_is_valid(self, token_create_at: int) -> bool:
         token_spend_by_generated = datetime.now()-datetime.fromtimestamp(token_create_at)
         #TODO アクセストークン発行から6時間以上経過しているが、リフレッシュトークンが有効期限内だった場合の処理は?2024/02/08
         if abs(token_spend_by_generated) <= timedelta(days=90):
             return True
         else:
             return False
-
-
-if __name__ == "__main__":
-    from configparser import ConfigParser
-
-    config = ConfigParser()
-    config.read("./doc/.ini")
-    
-    auth_url = OAuth.get_auth_url(
-        client_id=config["freee"]["CLIENT_ID"],
-        redirect_uri=config["freee"]["REDIRECT_URI"]
-    )
-    print(auth_url)
