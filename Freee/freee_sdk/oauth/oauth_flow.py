@@ -92,7 +92,7 @@ class OAuth:
         token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
         match token_response.status_code:
             case 200:
-                return token_response
+                return token_response.json()
             
             case 401:
                 raise UnAuthorizedError
