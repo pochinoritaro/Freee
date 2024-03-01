@@ -1,0 +1,29 @@
+[project]
+name = "Freee"
+version = "1.1.0"
+description = "This is a wrapper that allows FreeeAPI to be incorporated into server-based applications such as Slack and Discord."
+
+requires-python = ">=3.12"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {file = "LICENSE"}
+
+authors = [
+  {name = "pochimoritaro", email = "=pochimoritaro@gmail.com"}
+]
+keywords = ["python", "Freee", "SDK", "Wrapper", "API"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.12"
+]
+dependencies = [
+    "requests-oauthlib"
+]
+
+[project.urls]
+github="https://github.com/pochinoritaro/Freee"
