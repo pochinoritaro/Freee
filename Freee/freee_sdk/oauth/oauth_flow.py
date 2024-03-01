@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from urllib.parse import urljoin
 from requests import post
 from requests_oauthlib import OAuth2Session
+from Freee.freee_sdk.errors import UnAuthorizedError, InternalServerError
 
 
 class OAuth:
@@ -89,7 +90,16 @@ class OAuth:
             "redirect_uri": self.redirect_uri
             }
         token_response = post(OAuth.ACCESS_TOKEN_URL, data=header)
-        return token_response
+        match token_response.status_code:
+            case 200:
+                return token_response
+            
+            case 401:
+                raise UnAuthorizedError
+
+            case _:
+                print(f"function: get_access_token\nstatus: {token_response.status_code}")
+                raise InternalServerError
 
 
     def access_token_refresh(
