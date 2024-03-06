@@ -1281,8 +1281,10 @@ class HumanResourse(BaseClient):
 
     def update_employee_work_record(
         self,
-        clock_in_at: str|None=None,
-        clock_out_at: str|None=None,
+        break_clock_in_at: str|None=None,
+        break_clock_out_at: str|None=None,
+        work_clock_in_at: str|None=None,
+        work_clock_out_at: str|None=None,
         day_pattern: str|None=None,
         early_leaving_mins: int|None=None,
         is_absence: bool|None=None,
@@ -1378,11 +1380,13 @@ class HumanResourse(BaseClient):
         """
         #TODO JSON作成を見直す
         break_records = dict(
-            clock_in_at=clock_in_at,
-            clock_out_at=clock_out_at
-            )
+            clock_in_at=break_clock_in_at,
+            clock_out_at=break_clock_out_at
+        )
         body = dict(
-            break_records=break_records,
+            break_records=list(),
+            clock_in_at=work_clock_in_at,
+            clock_out_at=work_clock_out_at,
             day_pattern=day_pattern,
             early_leaving_mins=early_leaving_mins,
             is_absence=is_absence,
@@ -1401,9 +1405,10 @@ class HumanResourse(BaseClient):
             use_attendance_deduction=use_attendance_deduction,
             use_default_work_pattern=use_default_work_pattern
         )
+        body["break_records"].append(break_records)
         print(body)
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
-        return self.api_call(method="PUT", endpoint_url=endpoint_url, body=body)
+        #return self.api_call(method="PUT", endpoint_url=endpoint_url, body=body)
 
 
     def update_employee_work_record_summary(
