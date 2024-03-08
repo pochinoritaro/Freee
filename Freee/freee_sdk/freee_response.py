@@ -37,10 +37,8 @@ class FreeeResponse:
         Returns:
             str: フォーマットに沿った文字列
         """
-        print(self.data)
-        print(error_body)
         message = error_body["errors"][0]["messages"][0] if error_body.get("errors") is not None else error_body["message"]
-        code = error_body["errors"][0]["code"][0] if error_body.get("errors") is not None else error_body["code"]
+        code = error_body["errors"][0]["type"] if error_body.get("errors") is not None else error_body["code"]
         return f"{message}({code}[{self.status}])"
         
     
