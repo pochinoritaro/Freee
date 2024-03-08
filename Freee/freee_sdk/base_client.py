@@ -1,4 +1,5 @@
 from json import dumps
+import logging
 import requests
 from .freee_response import FreeeResponse
 from Freee.freee_sdk.errors import UnAuthorizedError
@@ -15,6 +16,7 @@ class BaseClient:
         token_create_at: int=None,
         headers: dict=None,
         company_id: int=None,
+        logger: logging.Logger|None=None,
         *,
         client_id: str=None,
         client_secret: str=None,
@@ -27,6 +29,7 @@ class BaseClient:
         self.__refresh_token = refresh_token
         self.__token_create_at = token_create_at
         self.__company_id = company_id
+        self._logger = logger if logger is not None else logging.getLogger(__name__)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -80,7 +83,8 @@ class BaseClient:
     @company_id.setter
     def company_id(self, company_id: int):
         self.__company_id = company_id
-        self.default_params["company_id"] = company_id
+        self.default_params["company_id"] = self.__company_id
+        print(self.default_params)
 
 
     # APIコール関係
@@ -93,21 +97,21 @@ class BaseClient:
         method: str,
         endpoint_url: str
         ) -> FreeeResponse:
-        api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
+        print(body)
         
+        self._logger.debug(f"function: api_call start")
+        api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
         match method:
             case "GET"|"DELETE":
                 query = self.default_params|_remove_none_values(query) if query is not None else self.default_params
         
             case "POST"|"PUT":
                 body = self.default_params|_remove_none_values(body) if body is not None else dict()
-                body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
+                body = _remove_none_values(body)
+                print(body)
         
             case _:
                 raise TypeError
-
-        if body is not None:
-            body = dumps(_remove_none_values(body), ensure_ascii=False).encode('utf-8')
 
         if headers is None:
             headers = create_headers(self.access_token)
@@ -130,13 +134,13 @@ class BaseClient:
         method: str,
         endpoint_url: str
         ) -> FreeeResponse:
-        print(f"url: {endpoint_url}")
-        
+        self._logger.debug(f"function: _urllib_api_send start\nurl:\t\t{endpoint_url}\nmethod:\t\t{method}\nbody:\t\t{body}\nquery:\t\t{query}")
+
         req = requests.request(
             method=method,
             url=endpoint_url,
             headers=headers,
-            data=body,
+            json=body,
             params=query
         )
         return FreeeResponse(
