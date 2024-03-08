@@ -1405,10 +1405,9 @@ class HumanResourse(BaseClient):
             use_attendance_deduction=use_attendance_deduction,
             use_default_work_pattern=use_default_work_pattern
         )
-        body["break_records"].append(break_records)
-        print(body)
+        body["break_records"].append(break_records) if break_clock_in_at and break_clock_out_at is not None else None
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
-        #return self.api_call(method="PUT", endpoint_url=endpoint_url, body=body)
+        return self.api_call(method="PUT", endpoint_url=endpoint_url, body=body)
 
 
     def update_employee_work_record_summary(
