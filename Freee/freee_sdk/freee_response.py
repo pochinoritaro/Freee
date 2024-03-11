@@ -15,6 +15,7 @@ class FreeeResponse:
             self._client = client
             self.http_verb = http_verb
             self.api_url = data.url
+            print(vars(data))
             self.data = data.json()
             self.status = data.status_code
     
@@ -56,8 +57,11 @@ class FreeeResponse:
             objrct: Freeeレスポンス
         """
         match self.status:
-            case 200|201|204:
+            case 200|201:
                 return self
+
+            case 204:
+                return None
 
             case 400:
                 raise err.BadRequestError(self.__error_content(self.data))
@@ -67,7 +71,7 @@ class FreeeResponse:
 
             case 403:
                 raise err.ForbiddenError(self.__error_content(self.data))
-        
+
             case 404:
                 raise err.NotFoundError(self.__error_content(self.data))
 
