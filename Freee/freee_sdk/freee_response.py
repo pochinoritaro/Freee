@@ -15,9 +15,9 @@ class FreeeResponse:
             self._client = client
             self.http_verb = http_verb
             self.api_url = data.url
-            print(vars(data))
-            self.data = data.json()
             self.status = data.status_code
+            self.data = data.json() if not data.status_code == 204 else dict()
+            
     
     def __getitem__(self, item: str) -> any:
         return self.data[item]
