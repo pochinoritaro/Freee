@@ -2942,6 +2942,179 @@ class HumanResourse(BaseClient):
         birth_date: str,
         entry_date: str
         ) -> FreeeResponse:
+        """指定した従業員の情報を更新します。
+
+        Args:
+            id (int): 従業員ID
+            birth_date (str): 生年月日
+            entry_date (str): 入社日
+            year (int | None, optional): 更新対象年. Defaults to None.
+            month (int | None, optional): 更新対象月. Defaults to None.
+            num (str | None, optional): 従業員番号. Defaults to None.
+            display_name (str | None, optional): 従業員名. Defaults to None.
+            base_pension_num (str | None, optional): 基礎年金番号. Defaults to None.
+            employment_insurance_reference_number (str | None, optional): 被保険者番号（雇用保険）. Defaults to None.
+            retire_date (str | None, optional): 退職日. Defaults to None.
+            company_reference_date_rule_name (str | None, optional): [締め日支払い日グループ名](https://support.freee.co.jp/hc/ja/articles/360000666303-%E7%B7%A0%E3%82%81%E6%97%A5%E6%94%AF%E6%89%95%E3%81%84%E6%97%A5%E3%82%92%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%E3%81%AF-) で設定した締め日支払い日を指定してください。. Defaults to None.
+
+        Returns:
+            FreeeResponse: 更新された従業員情報を返します。
+        
+        Example:
+            {
+                "employee": {
+                    "id": 0,
+                    "company_id": 0,
+                    "num": "string",
+                    "display_name": "string",
+                    "base_pension_num": "string",
+                    "employment_insurance_reference_number": "string",
+                    "birth_date": "string",
+                    "entry_date": "string",
+                    "retire_date": "string",
+                    "user_id": 0,
+                    "profile_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "last_name": "string",
+                        "first_name": "string",
+                        "last_name_kana": "string",
+                        "first_name_kana": "string",
+                        "zipcode1": "000",
+                        "zipcode2": "0000",
+                        "prefecture_code": 4,
+                        "address": "string",
+                        "address_kana": "string",
+                        "phone1": "000",
+                        "phone2": "0000",
+                        "phone3": "0000",
+                        "residential_zipcode1": "000",
+                        "residential_zipcode2": "0000",
+                        "residential_prefecture_code": 4,
+                        "residential_address": "string",
+                        "residential_address_kana": "string",
+                        "employment_type": "string",
+                        "title": "string",
+                        "gender": "male",
+                        "married": true,
+                        "is_working_student": true,
+                        "widow_type": "string",
+                        "disability_type": "string",
+                        "email": "test@example.com",
+                        "householder_name": "山田 吾郎",
+                        "householder": "father"
+                    },
+                    "health_insurance_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "entried": true,
+                        "health_insurance_salary_calc_type": "manual",
+                        "health_insurance_bonus_calc_type": "manual",
+                        "manual_health_insurance_amount_of_employee_salary": 8888,
+                        "manual_health_insurance_amount_of_employee_bonus": 7777,
+                        "manual_health_insurance_amount_of_company_salary": 6666.0001,
+                        "manual_health_insurance_amount_of_company_bonus": 5555.0001,
+                        "care_insurance_salary_calc_type": "manual",
+                        "care_insurance_bonus_calc_type": "manual",
+                        "manual_care_insurance_amount_of_employee_salary": 4444,
+                        "manual_care_insurance_amount_of_employee_bonus": 3333,
+                        "manual_care_insurance_amount_of_company_salary": 2222.0001,
+                        "manual_care_insurance_amount_of_company_bonus": 1111.0001,
+                        "reference_num": "string",
+                        "standard_monthly_remuneration": 0
+                    },
+                    "welfare_pension_insurance_rule": {
+                        "id": 0,
+                        "child_allowance_contribution_bonus_calc_type": "manual",
+                        "child_allowance_contribution_salary_calc_type": "manual",
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "entried": true,
+                        "manual_child_allowance_contribution_amount_bonus": 111.0001,
+                        "manual_child_allowance_contribution_amount_salary": 222.0001,
+                        "manual_welfare_pension_insurance_amount_of_company_bonus": 333.0001,
+                        "manual_welfare_pension_insurance_amount_of_company_salary": 444.0001,
+                        "manual_welfare_pension_insurance_amount_of_employee_bonus": 555,
+                        "manual_welfare_pension_insurance_amount_of_employee_salary": 666,
+                        "reference_num": "string",
+                        "standard_monthly_remuneration": 0,
+                        "welfare_pension_insurance_bonus_calc_type": "manual",
+                        "welfare_pension_insurance_salary_calc_type": "manual"
+                    },
+                    "dependent_rules": [
+                        {
+                            "id": 0,
+                            "company_id": 0,
+                            "employee_id": 0,
+                            "last_name": "string",
+                            "first_name": "string",
+                            "last_name_kana": "string",
+                            "first_name_kana": "string",
+                            "gender": "unselected",
+                            "relationship": "string",
+                            "birth_date": "string",
+                            "residence_type": "string",
+                            "zipcode1": "string",
+                            "zipcode2": "string",
+                            "prefecture_code": 4,
+                            "address": "string",
+                            "address_kana": "string",
+                            "base_pension_num": "string",
+                            "income": 0,
+                            "annual_revenue": 0,
+                            "disability_type": "string",
+                            "occupation": "string",
+                            "annual_remittance_amount": 0,
+                            "employment_insurance_receive_status": "unselected",
+                            "employment_insurance_receives_from": "string",
+                            "phone_type": "unselected",
+                            "phone1": "000",
+                            "phone2": "0000",
+                            "phone3": "0000",
+                            "social_insurance_and_tax_dependent": "string",
+                            "social_insurance_dependent_acquisition_date": "string",
+                            "social_insurance_dependent_acquisition_reason": "",
+                            "social_insurance_other_dependent_acquisition_reason": "string",
+                            "social_insurance_dependent_disqualification_date": "string",
+                            "social_insurance_dependent_disqualification_reason": "",
+                            "social_insurance_other_dependent_disqualification_reason": "string",
+                            "tax_dependent_acquisition_date": "string",
+                            "tax_dependent_acquisition_reason": "",
+                            "tax_other_dependent_acquisition_reason": "string",
+                            "tax_dependent_disqualification_date": "string",
+                            "tax_dependent_disqualification_reason": "",
+                            "tax_other_dependent_disqualification_reason": "string",
+                            "non_resident_dependents_reason": "none"
+                        }
+                    ],
+                    "bank_account_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "bank_name": "string",
+                        "bank_name_kana": "string",
+                        "bank_code": "string",
+                        "branch_name": "string",
+                        "branch_name_kana": "string",
+                        "branch_code": "string",
+                        "account_number": "string",
+                        "account_name": "string",
+                        "account_type": "string"
+                    },
+                    "basic_pay_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "pay_calc_type": "monthly",
+                        "pay_amount": 0
+                    },
+                    "payroll_calculation": true,
+                    "company_reference_date_rule_name": "当月締め翌月払い"
+                }
+            }
+        """
         endpoint_url = f"/api/v1/employees/{id}"
         employee = dict(
             num=num,
@@ -2995,6 +3168,213 @@ class HumanResourse(BaseClient):
         last_name_kana: str,
         first_name_kana: str
         ) -> FreeeResponse:
+        """指定した従業員の姓名・住所などを更新します。
+
+        Args:
+            employee_id (int): 従業員ID
+            year (int): 更新対象年
+            month (int): 更新対象月
+            last_name (str): 姓
+            first_name (str): 名
+            last_name_kana (str): 姓カナ
+            first_name_kana (str): 名カナ
+            zipcode1 (str | None, optional): 住民票住所の郵便番号1. Defaults to None.
+            zipcode2 (str | None, optional): 住民票住所の郵便番号2. Defaults to None.
+            prefecture_code (int | None, optional): 住民票住所の都道府県コード. Defaults to None.
+                example:
+                    -1: 設定しない\n
+                    0: 北海道\n
+                    1: 青森\n
+                    2: 岩手\n
+                    3: 宮城\n
+                    4: 秋田\n
+                    5: 山形\n
+                    6: 福島\n
+                    7: 茨城\n
+                    8: 栃木\n
+                    9: 群馬\n
+                    10 埼玉\n
+                    11 千葉\n
+                    12 東京\n
+                    13 神奈川\n
+                    14 新潟\n
+                    15 富山\n
+                    16 石川\n
+                    17 福井\n
+                    18 山梨\n
+                    19 長野\n
+                    20 岐阜\n
+                    21 静岡\n
+                    22 愛知\n
+                    23 三重\n
+                    24 滋賀\n
+                    25 京都\n
+                    26 大阪\n
+                    27 兵庫\n
+                    28 奈良\n
+                    29 和歌山\n
+                    30 鳥取\n
+                    31 島根\n
+                    32 岡山\n
+                    33 広島\n
+                    34 山口\n
+                    35 徳島\n
+                    36 香川\n
+                    37 愛媛\n
+                    38 高知\n
+                    39 福岡\n
+                    40 佐賀\n
+                    41 長崎\n
+                    42 熊本\n
+                    43 大分\n
+                    44 宮崎\n
+                    45 鹿児島\n
+                    46 沖縄\n
+            address (str | None, optional): 住民票住所の市区町村以降の住所. Defaults to None.
+            address_kana (str | None, optional): 住民票住所の市区町村以降の住所カナ. Defaults to None.
+            phone1 (str | None, optional): 電話番号1（先頭番号、例:03-1111-222x の03部分）. Defaults to None.
+            phone2 (str | None, optional): 電話番号2（中間番号、例:03-1111-222x の1111部分）. Defaults to None.
+            phone3 (str | None, optional): 電話番号3（末尾番号、例:03-1111-222x の222x部分）. Defaults to None.
+            residential_zipcode1 (str | None, optional): 現住所の郵便番号1（先頭番号、例:100-8111 の100部分）. Defaults to None.
+            residential_zipcode2 (str | None, optional): 現住所の郵便番号2（末尾番号、例:100-8111 の8111部分）. Defaults to None.
+            residential_prefecture_code (int | None, optional): 現住所の都道府県コード. Defaults to None.
+                example:
+                    -1: 設定しない\n
+                    0: 北海道\n
+                    1: 青森\n
+                    2: 岩手\n
+                    3: 宮城\n
+                    4: 秋田\n
+                    5: 山形\n
+                    6: 福島\n
+                    7: 茨城\n
+                    8: 栃木\n
+                    9: 群馬\n
+                    10 埼玉\n
+                    11 千葉\n
+                    12 東京\n
+                    13 神奈川\n
+                    14 新潟\n
+                    15 富山\n
+                    16 石川\n
+                    17 福井\n
+                    18 山梨\n
+                    19 長野\n
+                    20 岐阜\n
+                    21 静岡\n
+                    22 愛知\n
+                    23 三重\n
+                    24 滋賀\n
+                    25 京都\n
+                    26 大阪\n
+                    27 兵庫\n
+                    28 奈良\n
+                    29 和歌山\n
+                    30 鳥取\n
+                    31 島根\n
+                    32 岡山\n
+                    33 広島\n
+                    34 山口\n
+                    35 徳島\n
+                    36 香川\n
+                    37 愛媛\n
+                    38 高知\n
+                    39 福岡\n
+                    40 佐賀\n
+                    41 長崎\n
+                    42 熊本\n
+                    43 大分\n
+                    44 宮崎\n
+                    45 鹿児島\n
+                    46 沖縄\n
+            residential_address (str | None, optional): 現住所の住所. Defaults to None.
+            residential_address_kana (str | None, optional): 現住所の住所カナ. Defaults to None.
+            employment_type (str | None, optional): 雇用形態. Defaults to None.
+                Enum:
+                    board-member: 役員
+                    空文字列: 役員以外
+            title (str | None, optional): 肩書. Defaults to None.
+            gender (str | None, optional): 性別. Defaults to None.
+                Enum:
+                    unselected: 未選択
+                    male: 男性
+                    female: 女性
+            married (bool | None, optional): 配偶者の有無. Defaults to None.
+            is_working_student (bool | None, optional): 勤労学生かどうか. Defaults to None.
+            widow_type (str | None, optional): 寡夫／寡婦かどうか. Defaults to None.
+                Enum:
+                    na: 空白
+                    widower: 寡夫
+                    widow: 寡婦
+                    special_widow: 特別寡婦
+                    one_parent: ひとり親
+            disability_type (str | None, optional): 障害者かどうか. Defaults to None.
+                Enum:
+                    na: 空白
+                    general: 障害者
+                    heavy: 特別障害者
+            email (str | None, optional): メールアドレス. Defaults to None.
+            householder_name (str | None, optional): 世帯主の名前. Defaults to None.
+            householder (str | None, optional): 世帯主の続柄. Defaults to None.
+                Enum:
+                    myself:本人
+                    husband:夫
+                    wife:妻
+                    father:父
+                    mother:母
+                    child:子供
+                    senior_brother:兄
+                    junior_brother:弟
+                    senior_sister:姉
+                    junior_sister:妹
+                    grandchild:孫
+                    grandfather:祖父
+                    grandmother:祖母
+                    father_in_law:義父
+                    mother_in_law:義母
+                    grandfather_in_law:義祖父
+                    grandmother_in_law:義祖母
+                    other:その他
+
+        Returns:
+            FreeeResponse:更新された従業員の姓名・住所などを返します。
+        
+        Example:
+            {
+                "employee_profile_rule": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "last_name": "string",
+                    "first_name": "string",
+                    "last_name_kana": "string",
+                    "first_name_kana": "string",
+                    "zipcode1": "000",
+                    "zipcode2": "0000",
+                    "prefecture_code": 4,
+                    "address": "string",
+                    "address_kana": "string",
+                    "phone1": "000",
+                    "phone2": "0000",
+                    "phone3": "0000",
+                    "residential_zipcode1": "000",
+                    "residential_zipcode2": "0000",
+                    "residential_prefecture_code": 4,
+                    "residential_address": "string",
+                    "residential_address_kana": "string",
+                    "employment_type": "string",
+                    "title": "string",
+                    "gender": "male",
+                    "married": true,
+                    "is_working_student": true,
+                    "widow_type": "string",
+                    "disability_type": "string",
+                    "email": "test@example.com",
+                    "householder_name": "山田 吾郎",
+                    "householder": "father"
+                }
+            }
+        """
         endpoint_url = f"/api/v1/employees/{employee_id}/profile_rule"
         employee_profile_rule = dict(
             last_name=last_name,
