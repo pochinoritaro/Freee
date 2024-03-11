@@ -303,8 +303,8 @@ class HumanResourse(BaseClient):
         start_target_date: str|None=None,
         end_target_date: str|None=None,
         passed_auto_check: bool|None=None,
-        limit: int|None=None,
-        offset: int|None=None
+        limit: int|None=50,
+        offset: int|None=0
         ) -> FreeeResponse:
         """指定した事業所の指定日付時点における残業申請情報をリストで返します。
 
@@ -437,8 +437,8 @@ class HumanResourse(BaseClient):
         start_target_date: str|None=None,
         end_target_date: str|None=None,
         passed_auto_check: bool|None=None,
-        limit: int|None=None,
-        offset: int|None=None
+        limit: int|None=50,
+        offset: int|None=0
         ) -> FreeeResponse:
         """指定した事業所の指定日付時点における有給申請情報をリストで返します。
 
@@ -574,8 +574,8 @@ class HumanResourse(BaseClient):
         start_target_date: str|None=None,
         end_target_date: str|None=None,
         passed_auto_check: bool|None=None,
-        limit: int|None=None,
-        offset: int|None=None
+        limit: int|None=50,
+        offset: int|None=0
         ) -> FreeeResponse:
         """指定した事業所の指定日付時点における特別休暇申請情報をリストで返します。
 
@@ -718,8 +718,8 @@ class HumanResourse(BaseClient):
         start_target_date: str|None=None,
         end_target_date: str|None=None,
         passed_auto_check: bool|None=None,
-        limit: int|None=None,
-        offset: int|None=None
+        limit: int|None=50,
+        offset: int|None=0
         ) -> FreeeResponse:
         """指定した事業所の指定日付時点における勤務時間修正申請情報をリストで返します。
 
@@ -864,8 +864,8 @@ class HumanResourse(BaseClient):
 
     def get_bonuses_employee_payroll_statements(
         self,
-        limit: int|None=None,
-        offset: int|None=None,
+        limit: int|None=50,
+        offset: int|None=0,
         *,
         year: int|None=None,
         month: int|None=None
@@ -1573,10 +1573,10 @@ class HumanResourse(BaseClient):
 
     def get_employee_group_memberships(
         self,
-        with_no_payroll_calculation: bool|None=None,
+        with_no_payroll_calculation: bool|None=False,
         employee_ids: str|None=None,
-        limit: int|None=None,
-        offset: int|None=None,
+        limit: int|None=50,
+        offset: int|None=0,
         *,
         base_date: str|None=None
         ) -> FreeeResponse:
@@ -1837,8 +1837,8 @@ class HumanResourse(BaseClient):
         self,
         from_date: str|None=None,
         to_date: str|None=None,
-        limit: int|None=None,
-        offset: int|None=None,
+        limit: int|None=50,
+        offset: int|None=0,
         *,
         employee_id: int|None=None
         ) -> FreeeResponse:
@@ -2275,8 +2275,8 @@ class HumanResourse(BaseClient):
 
     def get_salaries_employee_payroll_statements(
         self,
-        limit: int|None=None,
-        offset: int|None=None,
+        limit: int|None=50,
+        offset: int|None=0,
         *,
         year: int|None=None,
         month: int|None=None
@@ -2912,8 +2912,8 @@ class HumanResourse(BaseClient):
 
     def get_yearend_adjustment_employees(
         self,
-        limit: int|None=None,
-        offset: int|None=None,
+        limit: int|None=50,
+        offset: int|None=0,
         *,
         year: int|None=None
         ) -> FreeeResponse:
