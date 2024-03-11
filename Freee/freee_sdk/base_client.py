@@ -2,7 +2,6 @@ from json import dumps
 import logging
 import requests
 from .freee_response import FreeeResponse
-from Freee.freee_sdk.errors import UnAuthorizedError
 from Freee.freee_sdk.utils import create_headers, _get_url, _remove_none_values
 from Freee.freee_sdk.oauth import OAuth
 
