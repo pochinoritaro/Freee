@@ -96,7 +96,6 @@ class BaseClient:
         method: str,
         endpoint_url: str
         ) -> FreeeResponse:
-        print(body)
         
         self._logger.debug(f"function: api_call start")
         api_url = _get_url(base_url=self.request_url, endpoint_url=endpoint_url)
@@ -107,7 +106,6 @@ class BaseClient:
             case "POST"|"PUT":
                 body = self.default_params|_remove_none_values(body) if body is not None else dict()
                 body = _remove_none_values(body)
-                print(body)
         
             case _:
                 raise TypeError
