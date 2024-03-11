@@ -2528,22 +2528,22 @@ class HumanResourse(BaseClient):
         """従業員を新規作成します。
 
         Args:
-            first_name (str) -> FreeeResponse: _description_
-            last_name (str) -> FreeeResponse: _description_
-            first_name_kana (str) -> FreeeResponse: _description_
-            last_name_kana (str) -> FreeeResponse: _description_
-            pay_amount (int) -> FreeeResponse: _description_
-            birth_date (str) -> FreeeResponse: _description_
+            first_name (str) -> FreeeResponse: None
+            last_name (str) -> FreeeResponse: None
+            first_name_kana (str) -> FreeeResponse: None
+            last_name_kana (str) -> FreeeResponse: None
+            pay_amount (int) -> FreeeResponse: None
+            birth_date (str) -> FreeeResponse: None
             employee_num (str | None, optional) -> FreeeResponse: 従業員番号 Defaults to None.
             working_hours_system_name (str | None, optional) -> FreeeResponse: 勤務・賃金設定名 で設定した名称を指定してください。Defaults to None.
             company_reference_date_rule_name (str | None, optional) -> FreeeResponse: 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
             - 未指定の際は、最初に登録したデータが利用されます。
             - 入力パラメータのno_payroll_calculationがtrueの場合に指定するとエラーになります。 Defaults to None.
-            gender (str | None, optional) -> FreeeResponse: _description_
-            married (bool | None, optional) -> FreeeResponse: _description_
-            no_payroll_calculation (bool | None, optional) -> FreeeResponse: _description_
-            entry_date (str | None, optional) -> FreeeResponse: _description_
-            pay_calc_type (str, optional) -> FreeeResponse: _description_. Defaults to "monthly".
+            gender (str | None, optional) -> FreeeResponse: None
+            married (bool | None, optional) -> FreeeResponse: None
+            no_payroll_calculation (bool | None, optional) -> FreeeResponse: None
+            entry_date (str | None, optional) -> FreeeResponse: None
+            pay_calc_type (str, optional) -> FreeeResponse: None. Defaults to "monthly".
 
         """
         employee_dict = dict(
@@ -3761,6 +3761,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定したIDの従業員を削除します。
+
+        Args:
+            id (int): 従業員ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./employees/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3772,6 +3780,17 @@ class HumanResourse(BaseClient):
         employee_id: int,
         date: str
         ) -> FreeeResponse:
+        """指定した従業員の勤怠情報を削除します。
+
+        Args:
+            employee_id (int): 従業員ID
+            date (str): 削除対象年月日(YYYY-MM-DD)
+
+        Returns:
+            FreeeResponse: None
+
+
+        """
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3782,6 +3801,16 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の部門の情報を削除します。
+
+        部門APIの使い方については、[部門APIを利用した組織図の取得について](https://developer.freee.co.jp/tips/groups-api-hierarchy) をご参照ください。
+
+        Args:
+            id (int): 部門ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./groups/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3792,6 +3821,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の役職の情報を削除します。
+
+        Args:
+            id (int): 役職ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./positions/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3802,6 +3839,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の月次勤怠締め申請情報を削除します。
+
+        Args:
+            id (int): 月次勤怠締め申請ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3812,6 +3857,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の勤務時間修正申請情報を削除します。
+
+        Args:
+            id (int): 勤務時間修正申請ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./approval_requests/work_times/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3822,6 +3875,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の有給申請情報を削除します。
+
+        Args:
+            id (int): 有給申請ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./approval_requests/paid_holidays/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3832,6 +3893,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の特別休暇申請情報を削除します。
+
+        Args:
+            id (int): 特別休暇申請ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./approval_requests/special_holidays/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3842,6 +3911,14 @@ class HumanResourse(BaseClient):
         *,
         id: int
         ) -> FreeeResponse:
+        """指定した事業所の残業申請情報を削除します。
+
+        Args:
+            id (int): 残業申請ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./approval_requests/overtime_works/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3853,6 +3930,15 @@ class HumanResourse(BaseClient):
         year: int,
         employee_id: int
         ) -> FreeeResponse:
+        """指定した従業員の前職情報を削除します。
+
+        Args:
+            year (int): 更新対象年
+            employee_id (int): 従業員ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./yearend_adjustments/{year}/previous_jobs/{employee_id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3865,6 +3951,16 @@ class HumanResourse(BaseClient):
         employee_id: int,
         id: int
         ) -> FreeeResponse:
+        """指定した従業員の保険料情報を削除します。
+
+        Args:
+            year (int): 更新対象年
+            employee_id (int): 従業員ID
+            id (int): 保険料ID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./yearend_adjustments/{year}/insurances/{employee_id}/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
@@ -3877,6 +3973,16 @@ class HumanResourse(BaseClient):
         employee_id: int,
         id: int
         ) -> FreeeResponse:
+        """指定した従業員の住宅ローンを削除します。
+
+        Args:
+            year (int): 更新対象年
+            employee_id (int): 従業員ID
+            id (int): 住宅ローンID
+
+        Returns:
+            FreeeResponse: None
+        """
         endpoint_url = f"./yearend_adjustments/{year}/housing_loans/{employee_id}/{id}"
         
         return self.api_call(method="DELETE", endpoint_url=endpoint_url)
