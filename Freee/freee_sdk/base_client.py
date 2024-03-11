@@ -83,7 +83,6 @@ class BaseClient:
     def company_id(self, company_id: int):
         self.__company_id = company_id
         self.default_params["company_id"] = self.__company_id
-        print(self.default_params)
 
 
     # APIコール関係
