@@ -3,10 +3,35 @@ from Freee.freee_sdk.freee_response import FreeeResponse
 from Freee.freee_sdk.utils import _remove_none_values
 
 class HumanResourse(BaseClient):
+    """人事労務API
+    
+    メソッドについての詳細は以下を参照してください。
+    https://developer.freee.co.jp/reference/hr/reference#/
+    """
     API_URL = "/hr/api/v1/"
 
 
     def get_users_me(self) -> FreeeResponse:
+        """ログインユーザーの取得
+
+        Returns:
+            FreeeResponse: このリクエストの認可セッションにおけるログインユーザーの情報を返します。
+        
+        Example:
+            {
+                "id": 0,
+                "companies": [
+                    {
+                        "id": 0,
+                        "name": "string",
+                        "role": "company_admin",
+                        "external_cid": "string",
+                        "employee_id": 0,
+                        "display_name": "string"
+                    }
+                ]
+            }
+        """
         endpoint_url = f"./users/me"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -16,15 +41,75 @@ class HumanResourse(BaseClient):
         *,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の申請経路を取得する。
+
+        Args:
+            id (int | None, optional): 申請経路ID
+
+        Returns:
+            FreeeResponse: 指定した事業所の申請経路を返します。
+        
+        Example:
+            {
+                "approval_flow_route": {
+                    "id": 1,
+                    "name": "申請経路",
+                    "description": "申請経路の説明",
+                    "user_id": 1,
+                    "definition_system": true,
+                    "first_step_id": 1,
+                    "usages": [
+                        "AttendanceWorkflow"
+                    ],
+                    "steps": [
+                        {
+                            "id": 1,
+                            "next_step_id": 2,
+                            "resource_type": "predefined_user",
+                            "user_ids": [
+                                3
+                            ]
+                        }
+                    ]
+                }
+            }
+        """
         endpoint_url = f"./approval_flow_routes/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
+#TODO 引数usageの詳細な説明を追記する。
     def get_approval_flow_routes(
         self,
         included_user_id: int|None=None,
         usage: str|None=None
         ) -> FreeeResponse:
+        """指定した事業所の申請経路一覧を取得する。
+
+        Args:
+            included_user_id (int | None, optional): 経路に含まれるユーザーのユーザーID
+            usage (str | None, optional): 申請種別（申請経路を使用できる申請種別を示します。例えば、AttendanceWorkflow の場合は、勤怠申請で使用できる申請経路です。）
+
+        Returns:
+            FreeeResponse: 指定した事業所の申請経路を返します。
+        
+        Example:
+            {
+                "approval_flow_routes": [
+                    {
+                        "id": 1,
+                        "name": "申請経路",
+                        "description": "申請経路の説明",
+                        "user_id": 1,
+                        "definition_system": true,
+                        "first_step_id": 1,
+                        "usages": [
+                            "AttendanceWorkflow"
+                        ]
+                    }
+                ]
+            }
+        """
         endpoint_url = f"./approval_flow_routes"
         query = dict(
             included_user_id=included_user_id,
@@ -38,6 +123,42 @@ class HumanResourse(BaseClient):
         *,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の月次勤怠締め申請情報を取得します。
+
+        Args:
+            id (int | None, optional): 月次勤怠締め申請ID
+
+        Returns:
+            FreeeResponse: 指定した事業所の月次勤怠締め申請情報を返します。
+        
+        Example:
+            {
+                "monthly_attendance": {
+                    "id": 1,
+                    "company_id": 1,
+                    "application_number": 1,
+                    "applicant_id": 1,
+                    "approver_ids": [
+                        1
+                    ],
+                    "target_date": "2022-02-01",
+                    "issue_date": "string",
+                    "status": "in_progress",
+                    "passed_auto_check": true,
+                    "approval_flow_route_id": 1,
+                    "approval_flow_route_name": "申請経路",
+                    "approval_flow_logs": [
+                        {
+                            "user_id": 1,
+                            "action": "approve",
+                            "update_at": "2022-06-08T09:46:46.000+09:00"
+                        }
+                    ],
+                    "current_step_id": 1,
+                    "current_round": 1
+                }
+            }
+        """
         endpoint_url = f"./approval_requests/monthly_attendances/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -53,9 +174,58 @@ class HumanResourse(BaseClient):
         start_target_date: str|None=None,
         end_target_date: str|None=None,
         passed_auto_check: bool|None=None,
-        limit: int|None=None,
-        offset: int|None=None
+        limit: int|None=50,
+        offset: int|None=0
         ) -> FreeeResponse:
+        """指定した事業所の指定日付時点における月次勤怠締め申請情報をリストで返します。
+
+        Args:
+            status (str | None, optional): 申請ステータス
+                exapmle:
+                    draft - 下書き\n
+                    in_progress - 申請中\n
+                    approved - 承認済\n
+                    feedback - 差戻し\n
+            application_number (int | None, optional): 申請No
+            start_issue_date (str | None, optional): 申請開始日
+            end_issue_date (str | None, optional): 申請終了日
+            approver_id (int | None, optional): 現在承認ステップの承認者のユーザーID
+                warning:
+                    approver_idに値を指定する場合、指定なしの申請経路を利用した申請は返却されません
+            applicant_id (int | None, optional): 申請者のユーザーID
+            start_target_date (str | None, optional): 対象開始日
+            end_target_date (str | None, optional): 対象終了日
+            passed_auto_check (bool | None, optional): 自動チェック結果
+                noticve:
+                    trueを指定した場合、自動チェック結果がtrueの申請のみ返却します。\n
+                    falseを指定した場合、自動チェック結果がfalseの申請のみ返却します。\n
+                    キーごと指定しない場合、すべての申請を返却します。\n
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における月次勤怠締め申請情報をリストで返します。
+        
+        Example:
+            {
+                "monthly_attendances": [
+                    {
+                        "id": 1,
+                        "company_id": 1,
+                        "application_number": 1,
+                        "applicant_id": 1,
+                        "approver_ids": [
+                            1
+                        ],
+                        "target_date": "2022-02-01",
+                        "issue_date": "string",
+                        "status": "in_progress",
+                        "passed_auto_check": true
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./approval_requests/monthly_attendances"
         query = dict(
             status=status,
@@ -78,6 +248,46 @@ class HumanResourse(BaseClient):
         *,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の残業申請情報を取得します。
+
+        Args:
+            id (int | None, optional): 残業申請ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所の残業申請情報を返します。
+        
+        Example:
+            {
+                "overtime_work": {
+                    "id": 1,
+                    "company_id": 1,
+                    "application_number": 1,
+                    "applicant_id": 1,
+                    "approver_ids": [
+                        1
+                    ],
+                    "target_date": "string",
+                    "start_at": "12:00",
+                    "end_at": "23:59",
+                    "issue_date": "string",
+                    "comment": "申請理由",
+                    "status": "in_progress",
+                    "revoke_status": "revoking",
+                    "passed_auto_check": true,
+                    "approval_flow_route_id": 1,
+                    "approval_flow_route_name": "申請経路",
+                    "approval_flow_logs": [
+                        {
+                            "user_id": 1,
+                            "action": "approve",
+                            "update_at": "2022-06-08T09:46:46.000+09:00"
+                        }
+                    ],
+                    "current_step_id": 1,
+                    "current_round": 1
+                }
+            }
+        """
         endpoint_url = f"./approval_requests/overtime_works/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -96,6 +306,59 @@ class HumanResourse(BaseClient):
         limit: int|None=None,
         offset: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の指定日付時点における残業申請情報をリストで返します。
+
+        Args:
+            status (str | None, optional): 申請ステータス
+                exapmle:
+                    draft - 下書き\n
+                    in_progress - 申請中\n
+                    approved - 承認済\n
+                    feedback - 差戻し\n
+            application_number (int | None, optional): 申請No
+            start_issue_date (str | None, optional): 申請開始日
+            end_issue_date (str | None, optional): 申請終了日
+            approver_id (int | None, optional): 現在承認ステップの承認者のユーザーID
+                warning:
+                    approver_idに値を指定する場合、指定なしの申請経路を利用した申請は返却されません
+            applicant_id (int | None, optional): 申請者のユーザーID
+            start_target_date (str | None, optional): 対象開始日
+            end_target_date (str | None, optional): 対象終了日
+            passed_auto_check (bool | None, optional): 自動チェック結果
+                noticve:
+                    trueを指定した場合、自動チェック結果がtrueの申請のみ返却します。\n
+                    falseを指定した場合、自動チェック結果がfalseの申請のみ返却します。\n
+                    キーごと指定しない場合、すべての申請を返却します。\n
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における残業申請情報をリストで返します。
+        
+        Example:
+            {
+                "overtime_works": [
+                    {
+                        "id": 1,
+                        "company_id": 1,
+                        "application_number": 1,
+                        "applicant_id": 1,
+                        "approver_ids": [
+                            1
+                        ],
+                        "target_date": "string",
+                        "start_at": "12:00",
+                        "end_at": "23:59",
+                        "issue_date": "string",
+                        "comment": "申請理由",
+                        "status": "in_progress",
+                        "revoke_status": "revoking",
+                        "passed_auto_check": true
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./approval_requests/overtime_works"
         query = dict(
             status=status,
@@ -118,6 +381,47 @@ class HumanResourse(BaseClient):
         *,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の有給申請情報を取得します。
+
+        Args:
+            id (int | None, optional): 有給申請ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所の有給申請情報を返します。
+        
+        Example:
+            {
+                "paid_holiday": {
+                    "id": 1,
+                    "company_id": 1,
+                    "application_number": 1,
+                    "applicant_id": 1,
+                    "approver_ids": [
+                        1
+                    ],
+                    "target_date": "string",
+                    "holiday_type": "half",
+                    "start_at": "12:00",
+                    "end_at": "23:59",
+                    "issue_date": "string",
+                    "comment": "申請理由",
+                    "status": "in_progress",
+                    "revoke_status": "revoking",
+                    "passed_auto_check": true,
+                    "approval_flow_route_id": 1,
+                    "approval_flow_route_name": "申請経路",
+                    "approval_flow_logs": [
+                        {
+                            "user_id": 1,
+                            "action": "approve",
+                            "update_at": "2022-06-08T09:46:46.000+09:00"
+                        }
+                    ],
+                    "current_step_id": 1,
+                    "current_round": 1
+                }
+            }
+        """
         endpoint_url = f"./approval_requests/paid_holidays/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -136,6 +440,60 @@ class HumanResourse(BaseClient):
         limit: int|None=None,
         offset: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の指定日付時点における有給申請情報をリストで返します。
+
+        Args:
+            status (str | None, optional): 申請ステータス
+                exapmle:
+                    draft - 下書き\n
+                    in_progress - 申請中\n
+                    approved - 承認済\n
+                    feedback - 差戻し\n
+            application_number (int | None, optional): 申請No
+            start_issue_date (str | None, optional): 申請開始日
+            end_issue_date (str | None, optional): 申請終了日
+            approver_id (int | None, optional): 現在承認ステップの承認者のユーザーID
+                warning:
+                    approver_idに値を指定する場合、指定なしの申請経路を利用した申請は返却されません
+            applicant_id (int | None, optional): 申請者のユーザーID
+            start_target_date (str | None, optional): 対象開始日
+            end_target_date (str | None, optional): 対象終了日
+            passed_auto_check (bool | None, optional): 自動チェック結果
+                noticve:
+                    trueを指定した場合、自動チェック結果がtrueの申請のみ返却します。\n
+                    falseを指定した場合、自動チェック結果がfalseの申請のみ返却します。\n
+                    キーごと指定しない場合、すべての申請を返却します。\n
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における有給申請情報をリストで返します。
+        
+        Example:
+            {
+                "paid_holidays": [
+                    {
+                        "id": 1,
+                        "company_id": 1,
+                        "application_number": 1,
+                        "applicant_id": 1,
+                        "approver_ids": [
+                            1
+                        ],
+                        "target_date": "string",
+                        "holiday_type": "half",
+                        "start_at": "12:00",
+                        "end_at": "23:59",
+                        "issue_date": "string",
+                        "comment": "申請理由",
+                        "status": "in_progress",
+                        "revoke_status": "revoking",
+                        "passed_auto_check": true
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./approval_requests/paid_holidays"
         query = dict(
             status=status,
@@ -158,6 +516,49 @@ class HumanResourse(BaseClient):
         *,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の特別休暇申請情報を取得します。
+
+        Args:
+            id (int | None, optional): 特別休暇申請ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所の特別休暇申請情報を返します。
+        
+        Example:
+            {
+                "special_holiday": {
+                    "id": 1,
+                    "company_id": 1,
+                    "application_number": 1,
+                    "applicant_id": 1,
+                    "approver_ids": [
+                        1
+                    ],
+                    "target_date": "string",
+                    "special_holiday_setting_id": 1,
+                    "special_holiday_name": "特別休暇名称",
+                    "holiday_type": "half",
+                    "start_at": "12:00",
+                    "end_at": "23:59",
+                    "issue_date": "string",
+                    "comment": "申請理由",
+                    "status": "in_progress",
+                    "revoke_status": null,
+                    "passed_auto_check": true,
+                    "approval_flow_route_id": 1,
+                    "approval_flow_route_name": "申請経路",
+                    "approval_flow_logs": [
+                        {
+                            "user_id": 1,
+                            "action": "approve",
+                            "update_at": "2022-06-08T09:46:46.000+09:00"
+                        }
+                    ],
+                    "current_step_id": 1,
+                    "current_round": 1
+                }
+            }
+        """
         endpoint_url = f"./approval_requests/special_holidays/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -176,6 +577,62 @@ class HumanResourse(BaseClient):
         limit: int|None=None,
         offset: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の指定日付時点における特別休暇申請情報をリストで返します。
+
+        Args:
+            status (str | None, optional): 申請ステータス
+                exapmle:
+                    draft - 下書き\n
+                    in_progress - 申請中\n
+                    approved - 承認済\n
+                    feedback - 差戻し\n
+            application_number (int | None, optional): 申請No
+            start_issue_date (str | None, optional): 申請開始日
+            end_issue_date (str | None, optional): 申請終了日
+            approver_id (int | None, optional): 現在承認ステップの承認者のユーザーID
+                warning:
+                    approver_idに値を指定する場合、指定なしの申請経路を利用した申請は返却されません
+            applicant_id (int | None, optional): 申請者のユーザーID
+            start_target_date (str | None, optional): 対象開始日
+            end_target_date (str | None, optional): 対象終了日
+            passed_auto_check (bool | None, optional): 自動チェック結果
+                noticve:
+                    trueを指定した場合、自動チェック結果がtrueの申請のみ返却します。\n
+                    falseを指定した場合、自動チェック結果がfalseの申請のみ返却します。\n
+                    キーごと指定しない場合、すべての申請を返却します。\n
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における特別休暇申請情報をリストで返します。
+        
+        Example:
+            {
+                "special_holidays": [
+                    {
+                        "id": 1,
+                        "company_id": 1,
+                        "application_number": 1,
+                        "applicant_id": 1,
+                        "approver_ids": [
+                            1
+                        ],
+                        "target_date": "string",
+                        "special_holiday_setting_id": 1,
+                        "special_holiday_name": "特別休暇名称",
+                        "holiday_type": "half",
+                        "start_at": "12:00",
+                        "end_at": "23:59",
+                        "issue_date": "string",
+                        "comment": "申請理由",
+                        "status": "in_progress",
+                        "revoke_status": null,
+                        "passed_auto_check": true
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./approval_requests/special_holidays"
         query = dict(
             status=status,
@@ -198,6 +655,54 @@ class HumanResourse(BaseClient):
         *,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の勤務時間修正申請情報を取得します。
+
+        Args:
+            id (int | None, optional): 勤務時間修正申請ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所の勤務時間修正申請情報を返します。
+        
+        Example:
+            {
+                "work_time": {
+                    "id": 1,
+                    "company_id": 1,
+                    "application_number": 1,
+                    "applicant_id": 1,
+                    "approver_ids": [
+                        1
+                    ],
+                    "target_date": "string",
+                    "clear_work_time": false,
+                    "clock_in_at": "12:00",
+                    "clock_out_at": "23:59",
+                    "lateness_mins": 0,
+                    "early_leaving_mins": 0,
+                    "break_records": [
+                        {
+                            "clock_in_at": "12:00",
+                            "clock_out_at": "23:59"
+                        }
+                    ],
+                    "issue_date": "string",
+                    "comment": "申請理由",
+                    "status": "in_progress",
+                    "passed_auto_check": true,
+                    "approval_flow_route_id": 1,
+                    "approval_flow_route_name": "申請経路",
+                    "approval_flow_logs": [
+                        {
+                            "user_id": 1,
+                            "action": "approve",
+                            "update_at": "2022-06-08T09:46:46.000+09:00"
+                        }
+                    ],
+                    "current_step_id": 1,
+                    "current_round": 1
+                }
+            }
+        """
         endpoint_url = f"./approval_requests/work_times/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -216,6 +721,67 @@ class HumanResourse(BaseClient):
         limit: int|None=None,
         offset: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所の指定日付時点における勤務時間修正申請情報をリストで返します。
+
+        Args:
+            status (str | None, optional): 申請ステータス
+                exapmle:
+                    draft - 下書き\n
+                    in_progress - 申請中\n
+                    approved - 承認済\n
+                    feedback - 差戻し\n
+            application_number (int | None, optional): 申請No
+            start_issue_date (str | None, optional): 申請開始日
+            end_issue_date (str | None, optional): 申請終了日
+            approver_id (int | None, optional): 現在承認ステップの承認者のユーザーID
+                warning:
+                    approver_idに値を指定する場合、指定なしの申請経路を利用した申請は返却されません
+            applicant_id (int | None, optional): 申請者のユーザーID
+            start_target_date (str | None, optional): 対象開始日
+            end_target_date (str | None, optional): 対象終了日
+            passed_auto_check (bool | None, optional): 自動チェック結果
+                noticve:
+                    trueを指定した場合、自動チェック結果がtrueの申請のみ返却します。\n
+                    falseを指定した場合、自動チェック結果がfalseの申請のみ返却します。\n
+                    キーごと指定しない場合、すべての申請を返却します。\n
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における勤務時間修正申請情報をリストで返します。
+        
+        Example:
+            {
+                "work_times": [
+                    {
+                        "id": 1,
+                        "company_id": 1,
+                        "application_number": 1,
+                        "applicant_id": 1,
+                        "approver_ids": [
+                            1
+                        ],
+                        "target_date": "string",
+                        "clear_work_time": true,
+                        "clock_in_at": "12:00",
+                        "clock_out_at": "23:59",
+                        "lateness_mins": 0,
+                        "early_leaving_mins": 0,
+                        "break_records": [
+                            {
+                            "clock_in_at": "12:00",
+                            "clock_out_at": "23:59"
+                            }
+                        ],
+                        "issue_date": "string",
+                        "comment": "申請理由",
+                        "status": "in_progress",
+                        "passed_auto_check": true
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./approval_requests/work_times"
         query = dict(
             status=status,
@@ -240,6 +806,54 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員ID、年月の賞与明細を返します。
+
+        指定した年月に支払いのある賞与明細が返されます。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員ID、年月の賞与明細を返します。
+        
+        Example:
+            {
+                "employee_payroll_statement": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "employee_name": "string",
+                    "employee_display_name": "string",
+                    "employee_num": "string",
+                    "closing_date": "string",
+                    "pay_date": "string",
+                    "fixed": true,
+                    "calc_status": "string",
+                    "calculated_at": "2024-03-11T03:19:30.369Z",
+                    "bonus_amount": "string",
+                    "total_allowance_amount": "string",
+                    "total_deduction_amount": "string",
+                    "net_payment_amount": "string",
+                    "gross_payment_amount": "string",
+                    "total_taxable_payment_amount": "string",
+                    "allowances": [
+                        {
+                            "name": "string",
+                            "amount": "string"
+                        }
+                    ],
+                    "deductions": [
+                        {
+                            "name": "string",
+                            "amount": "string"
+                        }
+                    ],
+                    "remark": "string"
+                }
+            }
+        """
         endpoint_url = f"./bonuses/employee_payroll_statements/{employee_id}"
         query = dict(
             year=year,
@@ -256,6 +870,58 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所に所属する従業員の賞与明細をリストで返します。
+
+        指定した年月に支払いのある賞与明細が返されます。
+
+        Args:
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所に所属する従業員の賞与明細をリストで返します。
+        
+        Example:
+            {
+                "employee_payroll_statements": [
+                    {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "employee_name": "string",
+                        "employee_display_name": "string",
+                        "employee_num": "string",
+                        "closing_date": "string",
+                        "pay_date": "string",
+                        "fixed": true,
+                        "calc_status": "string",
+                        "calculated_at": "2024-03-11T03:20:56.319Z",
+                        "bonus_amount": "string",
+                        "total_allowance_amount": "string",
+                        "total_deduction_amount": "string",
+                        "net_payment_amount": "string",
+                        "gross_payment_amount": "string",
+                        "total_taxable_payment_amount": "string",
+                        "allowances": [
+                            {
+                            "name": "string",
+                            "amount": "string"
+                            }
+                        ],
+                        "deductions": [
+                            {
+                            "name": "string",
+                            "amount": "string"
+                            }
+                        ],
+                        "remark": "string"
+                        }
+                    ],
+                "total_count": 0
+            }
+        """
         endpoint_url = f"./bonuses/employee_payroll_statements"
         query = dict(
             year=year,
@@ -270,8 +936,35 @@ class HumanResourse(BaseClient):
         self,
         limit: int=50, 
         offset: int=0, 
-        with_no_payroll_calculation: bool|None=None
+        with_no_payroll_calculation: bool|None=False
         ) -> FreeeResponse:
+        """指定した事業所に所属する従業員をリストで返します。
+
+        Args:
+            limit (int, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int, optional): 取得レコードのオフセット (デフォルト: 0)
+            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。
+
+        Returns:
+            FreeeResponse: 指定した事業所に所属する従業員をリストで返します。
+        
+        Example:
+            [
+                {
+                    "id": 0,
+                    "num": "string",
+                    "display_name": "string",
+                    "entry_date": "string",
+                    "retire_date": "string",
+                    "user_id": 0,
+                    "email": "string",
+                    "payroll_calculation": true,
+                    "closing_day": 31,
+                    "pay_day": 15,
+                    "month_of_pay_day": "next_month"
+                }
+            ]
+        """
         endpoint_url = f"./companies/{self.company_id}/employees"
         query = dict(
             limit=limit,
@@ -288,6 +981,174 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定したIDの従業員を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定したIDの従業員を返します。
+        
+        Example:
+            {
+                "employee": {
+                    "id": 0,
+                    "company_id": 0,
+                    "num": "string",
+                    "display_name": "string",
+                    "base_pension_num": "string",
+                    "employment_insurance_reference_number": "string",
+                    "birth_date": "string",
+                    "entry_date": "string",
+                    "retire_date": "string",
+                    "user_id": 0,
+                    "profile_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "last_name": "string",
+                        "first_name": "string",
+                        "last_name_kana": "string",
+                        "first_name_kana": "string",
+                        "zipcode1": "000",
+                        "zipcode2": "0000",
+                        "prefecture_code": 4,
+                        "address": "string",
+                        "address_kana": "string",
+                        "phone1": "000",
+                        "phone2": "0000",
+                        "phone3": "0000",
+                        "residential_zipcode1": "000",
+                        "residential_zipcode2": "0000",
+                        "residential_prefecture_code": 4,
+                        "residential_address": "string",
+                        "residential_address_kana": "string",
+                        "employment_type": "string",
+                        "title": "string",
+                        "gender": "male",
+                        "married": true,
+                        "is_working_student": true,
+                        "widow_type": "string",
+                        "disability_type": "string",
+                        "email": "test@example.com",
+                        "householder_name": "山田 吾郎",
+                        "householder": "father"
+                    },
+                    "health_insurance_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "entried": true,
+                        "health_insurance_salary_calc_type": "manual",
+                        "health_insurance_bonus_calc_type": "manual",
+                        "manual_health_insurance_amount_of_employee_salary": 8888,
+                        "manual_health_insurance_amount_of_employee_bonus": 7777,
+                        "manual_health_insurance_amount_of_company_salary": 6666.0001,
+                        "manual_health_insurance_amount_of_company_bonus": 5555.0001,
+                        "care_insurance_salary_calc_type": "manual",
+                        "care_insurance_bonus_calc_type": "manual",
+                        "manual_care_insurance_amount_of_employee_salary": 4444,
+                        "manual_care_insurance_amount_of_employee_bonus": 3333,
+                        "manual_care_insurance_amount_of_company_salary": 2222.0001,
+                        "manual_care_insurance_amount_of_company_bonus": 1111.0001,
+                        "reference_num": "string",
+                        "standard_monthly_remuneration": 0
+                    },
+                    "welfare_pension_insurance_rule": {
+                        "id": 0,
+                        "child_allowance_contribution_bonus_calc_type": "manual",
+                        "child_allowance_contribution_salary_calc_type": "manual",
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "entried": true,
+                        "manual_child_allowance_contribution_amount_bonus": 111.0001,
+                        "manual_child_allowance_contribution_amount_salary": 222.0001,
+                        "manual_welfare_pension_insurance_amount_of_company_bonus": 333.0001,
+                        "manual_welfare_pension_insurance_amount_of_company_salary": 444.0001,
+                        "manual_welfare_pension_insurance_amount_of_employee_bonus": 555,
+                        "manual_welfare_pension_insurance_amount_of_employee_salary": 666,
+                        "reference_num": "string",
+                        "standard_monthly_remuneration": 0,
+                        "welfare_pension_insurance_bonus_calc_type": "manual",
+                        "welfare_pension_insurance_salary_calc_type": "manual"
+                    },
+                    "dependent_rules": [
+                        {
+                            "id": 0,
+                            "company_id": 0,
+                            "employee_id": 0,
+                            "last_name": "string",
+                            "first_name": "string",
+                            "last_name_kana": "string",
+                            "first_name_kana": "string",
+                            "gender": "unselected",
+                            "relationship": "string",
+                            "birth_date": "string",
+                            "residence_type": "string",
+                            "zipcode1": "string",
+                            "zipcode2": "string",
+                            "prefecture_code": 4,
+                            "address": "string",
+                            "address_kana": "string",
+                            "base_pension_num": "string",
+                            "income": 0,
+                            "annual_revenue": 0,
+                            "disability_type": "string",
+                            "occupation": "string",
+                            "annual_remittance_amount": 0,
+                            "employment_insurance_receive_status": "unselected",
+                            "employment_insurance_receives_from": "string",
+                            "phone_type": "unselected",
+                            "phone1": "000",
+                            "phone2": "0000",
+                            "phone3": "0000",
+                            "social_insurance_and_tax_dependent": "string",
+                            "social_insurance_dependent_acquisition_date": "string",
+                            "social_insurance_dependent_acquisition_reason": "",
+                            "social_insurance_other_dependent_acquisition_reason": "string",
+                            "social_insurance_dependent_disqualification_date": "string",
+                            "social_insurance_dependent_disqualification_reason": "",
+                            "social_insurance_other_dependent_disqualification_reason": "string",
+                            "tax_dependent_acquisition_date": "string",
+                            "tax_dependent_acquisition_reason": "",
+                            "tax_other_dependent_acquisition_reason": "string",
+                            "tax_dependent_disqualification_date": "string",
+                            "tax_dependent_disqualification_reason": "",
+                            "tax_other_dependent_disqualification_reason": "string",
+                            "non_resident_dependents_reason": "none"
+                        }
+                    ],
+                    "bank_account_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "bank_name": "string",
+                        "bank_name_kana": "string",
+                        "bank_code": "string",
+                        "branch_name": "string",
+                        "branch_name_kana": "string",
+                        "branch_code": "string",
+                        "account_number": "string",
+                        "account_name": "string",
+                        "account_type": "string"
+                    },
+                    "basic_pay_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "pay_calc_type": "monthly",
+                        "pay_amount": 0
+                    },
+                    "payroll_calculation": true,
+                    "company_reference_date_rule_name": "当月締め翌月払い"
+                }
+            }
+        """
         endpoint_url = f"./employees/{id}"
         query = dict(
             year=year,
@@ -300,11 +1161,184 @@ class HumanResourse(BaseClient):
         self,
         limit: int=50, 
         offset: int=0, 
-        with_no_payroll_calculation: bool|None=None,
+        with_no_payroll_calculation: bool|None=False,
         *,
         year: int|None=None,
         month: int|None=None
         ) -> FreeeResponse:
+        """指定した対象年月に事業所に所属する従業員をリストで返します。
+
+        Args:
+            limit (int, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int, optional): 取得レコードのオフセット (デフォルト: 0)
+            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+
+        Returns:
+            FreeeResponse: 指定した対象年月に事業所に所属する従業員をリストで返します。
+        
+        Example:
+            {
+                "employees": [
+                    {
+                        "id": 0,
+                        "company_id": 0,
+                        "num": "string",
+                        "display_name": "string",
+                        "base_pension_num": "string",
+                        "employment_insurance_reference_number": "string",
+                        "birth_date": "string",
+                        "entry_date": "string",
+                        "retire_date": "string",
+                        "user_id": 0,
+                        "profile_rule": {
+                            "id": 0,
+                            "company_id": 0,
+                            "employee_id": 0,
+                            "last_name": "string",
+                            "first_name": "string",
+                            "last_name_kana": "string",
+                            "first_name_kana": "string",
+                            "zipcode1": "000",
+                            "zipcode2": "0000",
+                            "prefecture_code": 4,
+                            "address": "string",
+                            "address_kana": "string",
+                            "phone1": "000",
+                            "phone2": "0000",
+                            "phone3": "0000",
+                            "residential_zipcode1": "000",
+                            "residential_zipcode2": "0000",
+                            "residential_prefecture_code": 4,
+                            "residential_address": "string",
+                            "residential_address_kana": "string",
+                            "employment_type": "string",
+                            "title": "string",
+                            "gender": "male",
+                            "married": true,
+                            "is_working_student": true,
+                            "widow_type": "string",
+                            "disability_type": "string",
+                            "email": "test@example.com",
+                            "householder_name": "山田 吾郎",
+                            "householder": "father"
+                        },
+                        "health_insurance_rule": {
+                            "id": 0,
+                            "company_id": 0,
+                            "employee_id": 0,
+                            "entried": true,
+                            "health_insurance_salary_calc_type": "manual",
+                            "health_insurance_bonus_calc_type": "manual",
+                            "manual_health_insurance_amount_of_employee_salary": 8888,
+                            "manual_health_insurance_amount_of_employee_bonus": 7777,
+                            "manual_health_insurance_amount_of_company_salary": 6666.0001,
+                            "manual_health_insurance_amount_of_company_bonus": 5555.0001,
+                            "care_insurance_salary_calc_type": "manual",
+                            "care_insurance_bonus_calc_type": "manual",
+                            "manual_care_insurance_amount_of_employee_salary": 4444,
+                            "manual_care_insurance_amount_of_employee_bonus": 3333,
+                            "manual_care_insurance_amount_of_company_salary": 2222.0001,
+                            "manual_care_insurance_amount_of_company_bonus": 1111.0001,
+                            "reference_num": "string",
+                            "standard_monthly_remuneration": 0
+                        },
+                        "welfare_pension_insurance_rule": {
+                            "id": 0,
+                            "child_allowance_contribution_bonus_calc_type": "manual",
+                            "child_allowance_contribution_salary_calc_type": "manual",
+                            "company_id": 0,
+                            "employee_id": 0,
+                            "entried": true,
+                            "manual_child_allowance_contribution_amount_bonus": 111.0001,
+                            "manual_child_allowance_contribution_amount_salary": 222.0001,
+                            "manual_welfare_pension_insurance_amount_of_company_bonus": 333.0001,
+                            "manual_welfare_pension_insurance_amount_of_company_salary": 444.0001,
+                            "manual_welfare_pension_insurance_amount_of_employee_bonus": 555,
+                            "manual_welfare_pension_insurance_amount_of_employee_salary": 666,
+                            "reference_num": "string",
+                            "standard_monthly_remuneration": 0,
+                            "welfare_pension_insurance_bonus_calc_type": "manual",
+                            "welfare_pension_insurance_salary_calc_type": "manual"
+                        },
+                    "dependent_rules": [
+                        {
+                            "id": 0,
+                            "company_id": 0,
+                            "employee_id": 0,
+                            "last_name": "string",
+                            "first_name": "string",
+                            "last_name_kana": "string",
+                            "first_name_kana": "string",
+                            "gender": "unselected",
+                            "relationship": "string",
+                            "birth_date": "string",
+                            "residence_type": "string",
+                            "zipcode1": "string",
+                            "zipcode2": "string",
+                            "prefecture_code": 4,
+                            "address": "string",
+                            "address_kana": "string",
+                            "base_pension_num": "string",
+                            "income": 0,
+                            "annual_revenue": 0,
+                            "disability_type": "string",
+                            "occupation": "string",
+                            "annual_remittance_amount": 0,
+                            "employment_insurance_receive_status": "unselected",
+                            "employment_insurance_receives_from": "string",
+                            "phone_type": "unselected",
+                            "phone1": "000",
+                            "phone2": "0000",
+                            "phone3": "0000",
+                            "social_insurance_and_tax_dependent": "string",
+                            "social_insurance_dependent_acquisition_date": "string",
+                            "social_insurance_dependent_acquisition_reason": "",
+                            "social_insurance_other_dependent_acquisition_reason": "string",
+                            "social_insurance_dependent_disqualification_date": "string",
+                            "social_insurance_dependent_disqualification_reason": "",
+                            "social_insurance_other_dependent_disqualification_reason": "string",
+                            "tax_dependent_acquisition_date": "string",
+                            "tax_dependent_acquisition_reason": "",
+                            "tax_other_dependent_acquisition_reason": "string",
+                            "tax_dependent_disqualification_date": "string",
+                            "tax_dependent_disqualification_reason": "",
+                            "tax_other_dependent_disqualification_reason": "string",
+                            "non_resident_dependents_reason": "none"
+                        }
+                    ],
+                    "bank_account_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "bank_name": "string",
+                        "bank_name_kana": "string",
+                        "bank_code": "string",
+                        "branch_name": "string",
+                        "branch_name_kana": "string",
+                        "branch_code": "string",
+                        "account_number": "string",
+                        "account_name": "string",
+                        "account_type": "string"
+                    },
+                    "basic_pay_rule": {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "pay_calc_type": "monthly",
+                        "pay_amount": 0
+                    },
+                    "payroll_calculation": true,
+                    "company_reference_date_rule_name": "当月締め翌月払い"
+                    }
+                ],
+                "total_count": 0
+            }
+        """
         endpoint_url = f"./employees"
         query = dict(
             year=year,
@@ -324,6 +1358,47 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員に付与された特別休暇情報をリストで返します。
+
+        Args:
+            date (str | None, optional): 対象日. Defaults to None.
+            start_date (str | None, optional): 対象開始日. Defaults to None.
+            end_date (str | None, optional): 対象終了日. Defaults to None.
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員に付与された特別休暇情報をリストで返します。
+        
+        Example:
+            {
+                "employee_special_holidays": [
+                    {
+                        "id": 1,
+                        "company_id": 1,
+                        "employee_id": 1,
+                        "special_holiday_setting_id": 1,
+                        "name": "育休",
+                        "type_name": "育児休業日",
+                        "paid_type": "paid",
+                        "attendance_rate_calc_type": "in_workdays",
+                        "usage_day": "half",
+                        "valid_date_from": "string",
+                        "valid_date_to": "string",
+                        "days": 2,
+                        "used": 0.5,
+                        "num_days_and_hours_used": {
+                            "days": 0.5,
+                            "hours": 0
+                        },
+                        "left": 1.5,
+                        "num_days_and_hours_left": {
+                            "days": 1.5,
+                            "hours": 0
+                        }
+                    }
+                ]
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/special_holidays"
         query = dict(
             date=date,
@@ -340,6 +1415,37 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の銀行口座情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の銀行口座情報を返します。
+        
+        Example:
+            {
+                "employee_bank_account_rule": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "bank_name": "string",
+                    "bank_name_kana": "string",
+                    "bank_code": "string",
+                    "branch_name": "string",
+                    "branch_name_kana": "string",
+                    "branch_code": "string",
+                    "account_number": "string",
+                    "account_name": "string",
+                    "account_type": "string"
+                }
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/bank_account_rule"
         query = dict(
             year=year,
@@ -355,6 +1461,30 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の基本給情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の基本給情報を返します。
+        
+        Example:
+            {
+                "employee_basic_pay_rule": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "pay_calc_type": "monthly",
+                    "pay_amount": 0
+                }
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/basic_pay_rule"
         query = dict(
             year=year,
@@ -370,6 +1500,69 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の家族情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の家族情報を返します。
+        
+        Example:
+            {
+                "employee_dependent_rules": [
+                    {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "last_name": "string",
+                        "first_name": "string",
+                        "last_name_kana": "string",
+                        "first_name_kana": "string",
+                        "gender": "unselected",
+                        "relationship": "string",
+                        "birth_date": "string",
+                        "residence_type": "string",
+                        "zipcode1": "string",
+                        "zipcode2": "string",
+                        "prefecture_code": 4,
+                        "address": "string",
+                        "address_kana": "string",
+                        "base_pension_num": "string",
+                        "income": 0,
+                        "annual_revenue": 0,
+                        "disability_type": "string",
+                        "occupation": "string",
+                        "annual_remittance_amount": 0,
+                        "employment_insurance_receive_status": "unselected",
+                        "employment_insurance_receives_from": "string",
+                        "phone_type": "unselected",
+                        "phone1": "000",
+                        "phone2": "0000",
+                        "phone3": "0000",
+                        "social_insurance_and_tax_dependent": "string",
+                        "social_insurance_dependent_acquisition_date": "string",
+                        "social_insurance_dependent_acquisition_reason": "",
+                        "social_insurance_other_dependent_acquisition_reason": "string",
+                        "social_insurance_dependent_disqualification_date": "string",
+                        "social_insurance_dependent_disqualification_reason": "",
+                        "social_insurance_other_dependent_disqualification_reason": "string",
+                        "tax_dependent_acquisition_date": "string",
+                        "tax_dependent_acquisition_reason": "",
+                        "tax_other_dependent_acquisition_reason": "string",
+                        "tax_dependent_disqualification_date": "string",
+                        "tax_dependent_disqualification_reason": "",
+                        "tax_other_dependent_disqualification_reason": "string",
+                        "non_resident_dependents_reason": "none"
+                    }
+                ]
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/dependent_rules"
         query = dict(
             year=year,
@@ -387,6 +1580,53 @@ class HumanResourse(BaseClient):
         *,
         base_date: str|None=None
         ) -> FreeeResponse:
+        """指定した事業所の指定日付時点における所属情報をリストで返します。
+
+        Args:
+            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。. Defaults to None.
+            employee_ids (str | None, optional): 取得対象とする従業員IDを指定することができます。指定しない場合は全従業員が対象となります。(例:1,2,3,4,5). Defaults to None.
+            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
+            base_date (str | None, optional): 指定日。指定日付時点における所属情報をリストで返します。(YYYY-MM-DD). Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における所属情報をリストで返します。
+        
+        Example:
+            {
+                "employee_group_memberships": [
+                    {
+                        "id": 1,
+                        "num": "A-001",
+                        "display_name": "山田 太郎",
+                        "entry_date": "2021-04-01",
+                        "retire_date": "2022-03-31",
+                        "user_id": 1,
+                        "login_email": "example@example.com",
+                        "birth_date": "2000-01-01",
+                        "gender": "male",
+                        "payroll_calculation": true,
+                        "group_memberships": [
+                            {
+                            "start_date": "2000-01-01",
+                            "end_date": "2020-01-01",
+                            "group_id": 10,
+                            "group_code": "group2",
+                            "group_name": "営業部",
+                            "level": 2,
+                            "position_id": 1,
+                            "position_code": "position1",
+                            "position_name": "部長",
+                            "parent_group_id": 1,
+                            "parent_group_code": "group1",
+                            "parent_group_name": "営業統括"
+                            }
+                        ]
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./employee_group_memberships"
         query = dict(
             base_date=base_date,
@@ -405,6 +1645,43 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の健康保険情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の健康保険情報を返します。
+        
+        Example:
+            {
+                "employee_health_insurance_rule": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "entried": true,
+                    "health_insurance_salary_calc_type": "manual",
+                    "health_insurance_bonus_calc_type": "manual",
+                    "manual_health_insurance_amount_of_employee_salary": 8888,
+                    "manual_health_insurance_amount_of_employee_bonus": 7777,
+                    "manual_health_insurance_amount_of_company_salary": 6666.0001,
+                    "manual_health_insurance_amount_of_company_bonus": 5555.0001,
+                    "care_insurance_salary_calc_type": "manual",
+                    "care_insurance_bonus_calc_type": "manual",
+                    "manual_care_insurance_amount_of_employee_salary": 4444,
+                    "manual_care_insurance_amount_of_employee_bonus": 3333,
+                    "manual_care_insurance_amount_of_company_salary": 2222.0001,
+                    "manual_care_insurance_amount_of_company_bonus": 1111.0001,
+                    "reference_num": "string",
+                    "standard_monthly_remuneration": 0
+                }
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/health_insurance_rule"
         query = dict(
             year=year,
@@ -420,6 +1697,38 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付のカスタム項目情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付のカスタム項目情報を返します。
+        
+        Example:
+            {
+                "profile_custom_field_groups": [
+                    {
+                        "id": 1,
+                        "name": "資格取得結果",
+                        "profile_custom_field_rules": [
+                            {
+                                "id": 1,
+                                "field_type": "file",
+                                "name": "証明書ファイル",
+                                "value": "null",
+                                "file_name": "証明書ファイル.jpeg"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/profile_custom_fields"
         query = dict(
             year=year,
@@ -436,6 +1745,55 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の姓名などの情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の姓名などの情報を返します。
+        
+        Example:
+            {
+                "employee_profile_rule": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "last_name": "string",
+                    "first_name": "string",
+                    "last_name_kana": "string",
+                    "first_name_kana": "string",
+                    "zipcode1": "000",
+                    "zipcode2": "0000",
+                    "prefecture_code": 4,
+                    "address": "string",
+                    "address_kana": "string",
+                    "phone1": "000",
+                    "phone2": "0000",
+                    "phone3": "0000",
+                    "residential_zipcode1": "000",
+                    "residential_zipcode2": "0000",
+                    "residential_prefecture_code": 4,
+                    "residential_address": "string",
+                    "residential_address_kana": "string",
+                    "employment_type": "string",
+                    "title": "string",
+                    "gender": "male",
+                    "married": true,
+                    "is_working_student": true,
+                    "widow_type": "string",
+                    "disability_type": "string",
+                    "email": "test@example.com",
+                    "householder_name": "山田 吾郎",
+                    "householder": "father"
+                }
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/profile_rule"
         query = dict(
             year=year,
@@ -450,6 +1808,27 @@ class HumanResourse(BaseClient):
         employee_id: int|None=None,
         id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・指定した打刻の詳細情報を返します。
+
+        Args:
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            id (int | None, optional): 打刻ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・指定した打刻の詳細情報を返します。
+        
+        Example:
+            {
+                "employee_time_clock": {
+                    "id": 0,
+                    "date": "string",
+                    "type": "clock_in",
+                    "datetime": "2024-03-11T02:59:43.723Z",
+                    "original_datetime": "2024-03-11T02:59:43.723Z",
+                    "note": "string"
+                }
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/time_clocks/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -463,6 +1842,30 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・期間の打刻情報を返します。
+
+        Args:
+            from_date (str | None, optional): 取得する打刻期間の開始日(YYYY-MM-DD)(デフォルト: 当月の打刻開始日). Defaults to None.
+            to_date (str | None, optional): 取得する打刻期間の終了日(YYYY-MM-DD)(デフォルト: 当日). Defaults to None.
+            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・期間の打刻情報を返します。
+        
+        Example:
+            [
+                {
+                    "id": 0,
+                    "date": "string",
+                    "type": "clock_in",
+                    "datetime": "2024-03-11T03:00:51.597Z",
+                    "original_datetime": "2024-03-11T03:00:51.597Z",
+                    "note": "string"
+                }
+            ]
+        """
         endpoint_url = f"./employees/{employee_id}/time_clocks"
         query = dict(
             from_date=from_date,
@@ -479,6 +1882,25 @@ class HumanResourse(BaseClient):
         *,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の打刻可能種別と打刻基準日を返します。
+
+        例: すでに出勤した状態だと、休憩開始、退勤が配列で返ります。
+
+        Args:
+            date (str | None, optional): 従業員情報を取得したい年月日(YYYY-MM-DD)(例:2018-08-01)(デフォルト：当日). Defaults to None.
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の打刻可能種別と打刻基準日を返します。
+        
+        Example:
+            {
+                "available_types": [
+                    "clock_in"
+                ],
+                "base_date": "2018-07-31"
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/time_clocks/available_types"
         query = dict(
             date=date
@@ -493,6 +1915,41 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の厚生年金保険情報を返します。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+                notice:
+                    締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
+                    翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の厚生年金保険情報を返します。
+        
+        Example:
+            {
+                "employee_welfare_pension_insurance_rule": {
+                    "id": 0,
+                    "child_allowance_contribution_bonus_calc_type": "manual",
+                    "child_allowance_contribution_salary_calc_type": "manual",
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "entried": true,
+                    "manual_child_allowance_contribution_amount_bonus": 111.0001,
+                    "manual_child_allowance_contribution_amount_salary": 222.0001,
+                    "manual_welfare_pension_insurance_amount_of_company_bonus": 333.0001,
+                    "manual_welfare_pension_insurance_amount_of_company_salary": 444.0001,
+                    "manual_welfare_pension_insurance_amount_of_employee_bonus": 555,
+                    "manual_welfare_pension_insurance_amount_of_employee_salary": 666,
+                    "reference_num": "string",
+                    "standard_monthly_remuneration": 0,
+                    "welfare_pension_insurance_bonus_calc_type": "manual",
+                    "welfare_pension_insurance_salary_calc_type": "manual"
+                }
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/welfare_pension_insurance_rule"
         query = dict(
             year=year,
@@ -507,6 +1964,56 @@ class HumanResourse(BaseClient):
         employee_id: int|None=None,
         date: str|None=None
         ) -> FreeeResponse:
+        """指定した従業員・日付の勤怠情報を返します。
+
+        Args:
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            date (str | None, optional): 従業員情報を取得したい年月日(YYYY-MM-DD). Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員・日付の勤怠情報を返します。
+        
+        Example:
+            {
+                "break_records": [
+                    {
+                    "clock_in_at": "2024-03-11T03:08:12.200Z",
+                    "clock_out_at": "2024-03-11T03:08:12.200Z"
+                    }
+                ],
+                "clock_in_at": "2024-03-11T03:08:12.200Z",
+                "clock_out_at": "2024-03-11T03:08:12.200Z",
+                "date": "2024-03-11T03:08:12.200Z",
+                "day_pattern": "normal_day",
+                "schedule_pattern": "",
+                "early_leaving_mins": 0,
+                "half_paid_holiday_mins": 0,
+                "half_special_holiday_mins": 0,
+                "hourly_paid_holiday_mins": 0,
+                "hourly_special_holiday_mins": 0,
+                "is_absence": false,
+                "is_editable": true,
+                "lateness_mins": 0,
+                "normal_work_clock_in_at": "2024-03-11T03:08:12.200Z",
+                "normal_work_clock_out_at": "2024-03-11T03:08:12.200Z",
+                "normal_work_mins": 0,
+                "note": "string",
+                "paid_holiday": 0,
+                "special_holiday": 0,
+                "special_holiday_setting_id": 0,
+                "use_attendance_deduction": true,
+                "use_default_work_pattern": true,
+                "use_half_compensatory_holiday": false,
+                "total_overtime_work_mins": 0,
+                "total_holiday_work_mins": 0,
+                "total_latenight_work_mins": 0,
+                "not_auto_calc_work_time": false,
+                "total_excess_statutory_work_mins": 0,
+                "total_latenight_excess_statutory_work_mins": 0,
+                "total_overtime_except_normal_work_mins": 0,
+                "total_latenight_overtime_except_normal_work_min": 0
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/work_records/{date}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -519,6 +2026,102 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員、月の勤怠情報のサマリを返します。
+
+        Args:
+            work_records (bool | None, optional): サマリ情報に日次の勤怠情報を含める. Defaults to None.
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員、月の勤怠情報のサマリを返します。
+        
+        Example:
+            {
+                "year": 0,
+                "month": 0,
+                "start_date": "string",
+                "end_date": "string",
+                "work_days": 0,
+                "total_work_mins": 0,
+                "total_normal_work_mins": 0,
+                "total_excess_statutory_work_mins": 0,
+                "total_overtime_except_normal_work_mins": 0,
+                "total_overtime_within_normal_work_mins": 0,
+                "total_holiday_work_mins": 0,
+                "total_latenight_work_mins": 0,
+                "num_absences": 0,
+                "num_paid_holidays": 0,
+                "num_paid_holidays_and_hours": {
+                    "days": 0,
+                    "hours": 0
+                },
+                "num_paid_holidays_left": 0,
+                "num_paid_holidays_and_hours_left": {
+                    "days": 0,
+                    "hours": 0
+                },
+                "num_substitute_holidays_used": 0,
+                "num_compensatory_holidays_used": 0,
+                "num_special_holidays_used": 0,
+                "num_special_holidays_and_hours_used": {
+                    "days": 0,
+                    "hours": 0
+                },
+                "total_lateness_and_early_leaving_mins": 0,
+                "multi_hourly_wages": [
+                    {
+                    "name": "string",
+                    "total_normal_time_mins": 0
+                    }
+                ],
+                "work_records": [
+                    {
+                        "break_records": [
+                            {
+                            "clock_in_at": "2024-03-11T03:09:02.078Z",
+                            "clock_out_at": "2024-03-11T03:09:02.078Z"
+                            }
+                        ],
+                        "clock_in_at": "2024-03-11T03:09:02.078Z",
+                        "clock_out_at": "2024-03-11T03:09:02.078Z",
+                        "date": "2024-03-11T03:09:02.078Z",
+                        "day_pattern": "normal_day",
+                        "schedule_pattern": "",
+                        "early_leaving_mins": 0,
+                        "half_paid_holiday_mins": 0,
+                        "half_special_holiday_mins": 0,
+                        "hourly_paid_holiday_mins": 0,
+                        "hourly_special_holiday_mins": 0,
+                        "is_absence": false,
+                        "is_editable": true,
+                        "lateness_mins": 0,
+                        "normal_work_clock_in_at": "2024-03-11T03:09:02.078Z",
+                        "normal_work_clock_out_at": "2024-03-11T03:09:02.078Z",
+                        "normal_work_mins": 0,
+                        "note": "string",
+                        "paid_holiday": 0,
+                        "special_holiday": 0,
+                        "special_holiday_setting_id": 0,
+                        "use_attendance_deduction": true,
+                        "use_default_work_pattern": true,
+                        "use_half_compensatory_holiday": false,
+                        "total_overtime_work_mins": 0,
+                        "total_holiday_work_mins": 0,
+                        "total_latenight_work_mins": 0,
+                        "not_auto_calc_work_time": false,
+                        "total_excess_statutory_work_mins": 0,
+                        "total_latenight_excess_statutory_work_mins": 0,
+                        "total_overtime_except_normal_work_mins": 0,
+                        "total_latenight_overtime_except_normal_work_min": 0
+                    }
+                ],
+                "total_shortage_work_mins": 0,
+                "total_deemed_paid_excess_statutory_work_mins": 0,
+                "total_deemed_paid_overtime_except_normal_work_mins": 0
+            }
+        """
         endpoint_url = f"./employees/{employee_id}/work_record_summaries/{year}/{month}"
         query = dict(
             work_records=work_records,
@@ -527,11 +2130,51 @@ class HumanResourse(BaseClient):
 
 
     def get_groups(self) -> FreeeResponse:
+        """指定した事業所の指定日付時点における部門情報をリストで返します。
+        
+        部門APIの使い方については、[部門APIを利用した組織図の取得について](https://developer.freee.co.jp/tips/groups-api-hierarchy) をご参照ください。
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における部門情報をリストで返します。
+        
+        Example:
+            {
+                "groups": [
+                    {
+                        "id": 3,
+                        "code": "group2",
+                        "name": "営業部門",
+                        "level": 2,
+                        "parent_group_id": 2,
+                        "parent_group_code": "group1",
+                        "parent_group_name": "営業統括"
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./groups"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
 
     def get_positions(self) -> FreeeResponse:
+        """指定した事業所の指定日付時点における役職情報をリストで返します。
+
+        Returns:
+            FreeeResponse: 指定した事業所の指定日付時点における役職情報をリストで返します。
+        
+        Example:
+            {
+                "positions": [
+                    {
+                        "id": 1,
+                        "code": "position1",
+                        "name": "部長"
+                    }
+                ],
+                "total_count": 1
+            }
+        """
         endpoint_url = f"./positions"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
@@ -543,6 +2186,85 @@ class HumanResourse(BaseClient):
         month: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した従業員ID、年月の給与明細を返します。
+
+        指定した年月に支払いのある給与明細が返されます。
+
+        Args:
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            employee_id (int | None, optional): 従業員ID. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した従業員ID、年月の給与明細を返します。
+        
+        Example:
+            {
+                "employee_payroll_statement": {
+                    "id": 0,
+                    "company_id": 0,
+                    "employee_id": 0,
+                    "employee_name": "string",
+                    "employee_display_name": "string",
+                    "employee_num": "string",
+                    "pay_date": "string",
+                    "start_date": "string",
+                    "closing_date": "string",
+                    "variable_pay_start_date": "string",
+                    "variable_pay_closing_date": "string",
+                    "fixed": true,
+                    "calc_status": "string",
+                    "calculated_at": "2024-03-11T03:13:45.296Z",
+                    "pay_calc_type": "monthly",
+                    "board_member_remuneration_amount": "string",
+                    "basic_pay_amount": "string",
+                    "work_days": "string",
+                    "normal_work_time": "string",
+                    "normal_work_days": "string",
+                    "work_mins_by_paid_holiday": "string",
+                    "num_paid_holidays": "string",
+                    "is_board_member": true,
+                    "total_attendance_deduction_amount": "string",
+                    "total_allowance_amount": "string",
+                    "total_deduction_amount": "string",
+                    "net_payment_amount": "string",
+                    "gross_payment_amount": "string",
+                    "total_worked_days_count": "string",
+                    "total_taxable_payment_amount": "string",
+                    "total_expense_amount": "string",
+                    "total_transfer_amount": "string",
+                    "total_annual_payment_amount": "string",
+                    "payments": [
+                        {
+                            "name": "string",
+                            "amount": "string"
+                        }
+                    ],
+                    "deductions": [
+                        {
+                            "name": "string",
+                            "amount": "string"
+                        }
+                    ],
+                    "attendances": [
+                        {
+                            "name": "string",
+                            "time": "string",
+                            "amount": "string"
+                        }
+                    ],
+                    "overtime_pays": [
+                        {
+                            "name": "時間外労働",
+                            "time": "60.0",
+                            "amount": "1000.0",
+                            "code": "12345abcde"
+                        }
+                    ],
+                    "remark": "string"
+                }
+            }
+        """
         endpoint_url = f"./salaries/employee_payroll_statements/{employee_id}"
         query = dict(
             year=year,
@@ -559,6 +2281,89 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         month: int|None=None
         ) -> FreeeResponse:
+        """指定した事業所に所属する従業員の給与明細をリストで返します。
+
+        指定した年月に支払いのある給与明細が返されます。
+
+        Args:
+            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
+            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+
+        Returns:
+            FreeeResponse: 指定した事業所に所属する従業員の給与明細をリストで返します。
+        
+        Example:
+            {
+                "employee_payroll_statements": [
+                    {
+                        "id": 0,
+                        "company_id": 0,
+                        "employee_id": 0,
+                        "employee_name": "string",
+                        "employee_display_name": "string",
+                        "employee_num": "string",
+                        "pay_date": "string",
+                        "start_date": "string",
+                        "closing_date": "string",
+                        "variable_pay_start_date": "string",
+                        "variable_pay_closing_date": "string",
+                        "fixed": true,
+                        "calc_status": "string",
+                        "calculated_at": "2024-03-11T03:15:50.062Z",
+                        "pay_calc_type": "monthly",
+                        "board_member_remuneration_amount": "string",
+                        "basic_pay_amount": "string",
+                        "work_days": "string",
+                        "normal_work_time": "string",
+                        "normal_work_days": "string",
+                        "work_mins_by_paid_holiday": "string",
+                        "num_paid_holidays": "string",
+                        "is_board_member": true,
+                        "total_attendance_deduction_amount": "string",
+                        "total_allowance_amount": "string",
+                        "total_deduction_amount": "string",
+                        "net_payment_amount": "string",
+                        "gross_payment_amount": "string",
+                        "total_worked_days_count": "string",
+                        "total_taxable_payment_amount": "string",
+                        "total_expense_amount": "string",
+                        "total_transfer_amount": "string",
+                        "total_annual_payment_amount": "string",
+                        "payments": [
+                            {
+                            "name": "string",
+                            "amount": "string"
+                            }
+                        ],
+                        "deductions": [
+                            {
+                            "name": "string",
+                            "amount": "string"
+                            }
+                        ],
+                        "attendances": [
+                            {
+                            "name": "string",
+                            "time": "string",
+                            "amount": "string"
+                            }
+                        ],
+                        "overtime_pays": [
+                            {
+                            "name": "時間外労働",
+                            "time": "60.0",
+                            "amount": "1000.0",
+                            "code": "12345abcde"
+                            }
+                        ],
+                        "remark": "string"
+                        }
+                    ],
+                    "total_count": 1
+                }
+        """
         endpoint_url = f"./salaries/employee_payroll_statements"
         query = dict(
             year=year,
@@ -575,6 +2380,125 @@ class HumanResourse(BaseClient):
         year: int|None=None,
         employee_id: int|None=None
         ) -> FreeeResponse:
+        """指定した年、従業員IDの年末調整の詳細内容を返します。
+        年末調整対象外の従業員は、本人情報、給与・賞与、前職情報のみが取得できます。
+
+        Args:
+            year (int | None, optional): 年末調整を取得したい年. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
+
+        Returns:
+            FreeeResponse: 指定した年、従業員IDの年末調整の詳細内容を返します。
+        
+        Example:
+            {
+                "employee": {
+                    "employee_id": 0,
+                    "num": "A-001",
+                    "last_name": "山田",
+                    "first_name": "太郎",
+                    "last_name_kana": "ヤマダ",
+                    "first_name_kana": "タロウ",
+                    "birth_date": "string",
+                    "entry_date": "string",
+                    "retire_date": "string",
+                    "employment_type": "string",
+                    "title": "string",
+                    "zipcode1": "141",
+                    "zipcode2": "0031",
+                    "prefecture_code": 12,
+                    "address": "品川区大崎1-2-2",
+                    "address_kana": "シナガワクオオサキ1-2-2",
+                    "payer_type": "kou",
+                    "widow_type": "na",
+                    "disability_type": "na",
+                    "married": true,
+                    "is_working_student": true,
+                    "is_foreigner": true,
+                    "other_company_revenue": 1000000,
+                    "all_other_income": 1000000,
+                    "householder": "myself",
+                    "householder_name": "山田 太郎",
+                    "is_calc_income_tax": true
+                },
+                "dependents": [
+                    {
+                        "id": 1,
+                        "last_name": "山田",
+                        "first_name": "花子",
+                        "last_name_kana": "ヤマダ",
+                        "first_name_kana": "ハナコ",
+                        "relationship": "spouse",
+                        "birth_date": "1999-01-01",
+                        "social_insurance_and_tax_dependent": "social_insurance_and_tax",
+                        "income": 0,
+                        "employment_revenue": 0,
+                        "all_other_income": 0,
+                        "disability_type": "na",
+                        "residence_type": "live_in",
+                        "zipcode1": "141",
+                        "zipcode2": "0031",
+                        "prefecture_code": 12,
+                        "address": "品川区大崎1-2-2",
+                        "address_kana": "シナガワクオオサキ1-2-2",
+                        "annual_remittance_amount": 0,
+                        "non_resident_dependents_reason": "none",
+                        "is_resident_tax_only_deduction": true,
+                        "retirement_income": 0
+                    }
+                ],
+                "insurances": [
+                    {
+                        "id": 0,
+                        "type": "life_care_pension_insurance",
+                        "category": "life",
+                        "new_or_old": "new",
+                        "company_name": "freee生命保険株式会社",
+                        "kind_of_purpose": "利差配当付終身",
+                        "period": "終身",
+                        "policyholder_last_name": "契約",
+                        "policyholder_first_name": "太郎",
+                        "recipient_last_name": "受取",
+                        "recipient_first_name": "太郎",
+                        "recipient_relationship": "child",
+                        "payment_start_date": "2000-04-01",
+                        "amount": 1000000
+                    }
+                ],
+                "housing_loan_deduction": 500000,
+                "housing_loans": [
+                    {
+                        "id": 1,
+                        "residence_start_date": "2022-03-31",
+                        "remaining_balance_at_yearend": 5000000,
+                        "category": "general",
+                        "specific_case_type": "not_qualified"
+                    }
+                ],
+                "payroll_and_bonus": {
+                    "fixed_payroll": 10000000,
+                    "fixed_payroll_deduction": 1000000,
+                    "fixed_payroll_income_tax": 1000000,
+                    "fixed_bonus": 10000000,
+                    "fixed_bonus_deduction": 1000000,
+                    "fixed_bonus_income_tax": 1000000,
+                    "unentered_payroll_amount": 500000,
+                    "unentered_payroll_deduction_amount": 500000,
+                    "unentered_payroll_income_tax_amount": 500000,
+                    "unentered_bonus_amount": 500000,
+                    "unentered_bonus_deduction_amount": 500000,
+                    "unentered_bonus_income_tax_amount": 500000
+                },
+                "previous_job": {
+                    "income": 5000000,
+                    "deduction": 1200000,
+                    "withholding_tax_amount": 100000,
+                    "company_name": "株式会社 前職",
+                    "company_address": "品川区大崎1-2-2",
+                    "retire_date": "2022-03-31"
+                }
+            }
+        """
         endpoint_url = f"./yearend_adjustments/{year}/employees/{employee_id}"
         query = dict(
             year=year
@@ -615,10 +2539,10 @@ class HumanResourse(BaseClient):
             company_reference_date_rule_name (str | None, optional) -> FreeeResponse: 締め日支払い日グループ名 で設定した締め日支払い日を指定してください。\n
             - 未指定の際は、最初に登録したデータが利用されます。
             - 入力パラメータのno_payroll_calculationがtrueの場合に指定するとエラーになります。 Defaults to None.
-            gender (str | None, optional) -> FreeeResponse: _description_. Defaults to None.
-            married (bool | None, optional) -> FreeeResponse: _description_. Defaults to None.
-            no_payroll_calculation (bool | None, optional) -> FreeeResponse: _description_. Defaults to None.
-            entry_date (str | None, optional) -> FreeeResponse: _description_. Defaults to None.
+            gender (str | None, optional) -> FreeeResponse: _description_
+            married (bool | None, optional) -> FreeeResponse: _description_
+            no_payroll_calculation (bool | None, optional) -> FreeeResponse: _description_
+            entry_date (str | None, optional) -> FreeeResponse: _description_
             pay_calc_type (str, optional) -> FreeeResponse: _description_. Defaults to "monthly".
 
         """
@@ -1311,19 +3235,19 @@ class HumanResourse(BaseClient):
             
             date (int) -> FreeeResponse: 更新対象年月日(YYYY-MM-DD)
             
-            clock_in_at (str, optional) -> FreeeResponse: 開始時刻. Defaults to None.
+            clock_in_at (str, optional) -> FreeeResponse: 開始時刻
             
-            clock_out_at (str, optional) -> FreeeResponse: 終了時刻. Defaults to None.
+            clock_out_at (str, optional) -> FreeeResponse: 終了時刻
             
-            day_pattern (WorkRecords.DayPttern, optional) -> FreeeResponse: 勤務パターン. Defaults to None.
+            day_pattern (WorkRecords.DayPttern, optional) -> FreeeResponse: 勤務パターン
                 prescribed_holiday、legal_holidayを指定すると、以下のパラメータについて、指定した値が反映されず無視されます。
                     - early_leaving_mins
                     - lateness_mins
                     - paid_holiday
             
-            early_leaving_mins (int, optional) -> FreeeResponse: 早退分の時間(分単位). Defaults to None.
+            early_leaving_mins (int, optional) -> FreeeResponse: 早退分の時間(分単位)
             
-            is_absence (bool, optional) -> FreeeResponse: 欠勤かどうか. Defaults to None.
+            is_absence (bool, optional) -> FreeeResponse: 欠勤かどうか
                 trueを指定すると、以下のパラーメータについて、指定した値が反映されず無視されます。
                     - break_records
                     - clock_in_at
@@ -1338,36 +3262,36 @@ class HumanResourse(BaseClient):
                     - normal_work_mins_by_paid_holiday
                     - paid_holiday
             
-            lateness_mins (int, optional) -> FreeeResponse: 遅刻分の時間. Defaults to None.
+            lateness_mins (int, optional) -> FreeeResponse: 遅刻分の時間
             
-            normal_work_clock_in_at (str, optional) -> FreeeResponse: 所定労働開始時刻. Defaults to None.
+            normal_work_clock_in_at (str, optional) -> FreeeResponse: 所定労働開始時刻
                 指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
             
-            normal_work_clock_out_at (str, optional) -> FreeeResponse: 所定労働終了時刻. Defaults to None.
+            normal_work_clock_out_at (str, optional) -> FreeeResponse: 所定労働終了時刻
                 指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
             
-            normal_work_mins (int, optional) -> FreeeResponse: 所定労働時間. Defaults to None.
+            normal_work_mins (int, optional) -> FreeeResponse: 所定労働時間
                 指定しない場合はデフォルト設定が使用されます。(デフォルト設定は従業員に設定した勤務賃金設定の出退勤時刻と労働時間の設定を参照して値が決まります。)
             
-            note (str, optional) -> FreeeResponse: 勤怠メモ. Defaults to None.
+            note (str, optional) -> FreeeResponse: 勤怠メモ
             
-            paid_holiday (bool, optional) -> FreeeResponse: この日の有休取得日数。1日単位で指定します。. Defaults to None.
+            paid_holiday (bool, optional) -> FreeeResponse: この日の有休取得日数。1日単位で指定します。
             
-            half_paid_holiday_mins (int, optional) -> FreeeResponse: 有給休暇の半休を利用した時間(分単位). Defaults to None.
+            half_paid_holiday_mins (int, optional) -> FreeeResponse: 有給休暇の半休を利用した時間(分単位)
             
-            hourly_paid_holiday_mins (int, optional) -> FreeeResponse: 有給休暇の時間休を利用した時間(分単位). Defaults to None.
+            hourly_paid_holiday_mins (int, optional) -> FreeeResponse: 有給休暇の時間休を利用した時間(分単位)
             
-            special_holiday (bool, optional) -> FreeeResponse: この日の特別休暇取得日数。1日単位で指定します。. Defaults to None.
+            special_holiday (bool, optional) -> FreeeResponse: この日の特別休暇取得日数。1日単位で指定します。
             
-            special_holiday_setting_id (int, optional) -> FreeeResponse: 特別休暇設定ID. Defaults to None.
+            special_holiday_setting_id (int, optional) -> FreeeResponse: 特別休暇設定ID
             
-            half_special_holiday_mins (int, optional) -> FreeeResponse: 特別休暇の半休を利用した時間(分単位). Defaults to None.
+            half_special_holiday_mins (int, optional) -> FreeeResponse: 特別休暇の半休を利用した時間(分単位)
             
-            hourly_special_holiday_mins (int, optional) -> FreeeResponse: 特別休暇の時間休を利用した時間(分単位). Defaults to None.
+            hourly_special_holiday_mins (int, optional) -> FreeeResponse: 特別休暇の時間休を利用した時間(分単位)
             
-            use_attendance_deduction (bool, optional) -> FreeeResponse: 欠勤・遅刻・早退を控除対象時間に算入するかどうか. Defaults to None.
+            use_attendance_deduction (bool, optional) -> FreeeResponse: 欠勤・遅刻・早退を控除対象時間に算入するかどうか
             
-            use_default_work_pattern (bool, optional) -> FreeeResponse: デフォルトの勤務設定を使うかどうか. Defaults to None.
+            use_default_work_pattern (bool, optional) -> FreeeResponse: デフォルトの勤務設定を使うかどうか
                 trueを指定した場合、以下のパラメータについて、指定した値に関係なく、従業員に設定した勤務賃金設定の休日の設定を参照して値が決まります
                     - day_pattern
                 
