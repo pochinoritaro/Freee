@@ -55,23 +55,27 @@ class FreeeResponse:
         Returns:
             objrct: Freeeレスポンス
         """
-        if self.status == 200:
-            return self
+        match self.status:
+            case 200|201|204:
+                return self
+
+            case 400:
+                raise err.BadRequestError(self.__error_content(self.data))
+
+            case 401:
+                raise err.AccessDeniedError(self.__error_content(self.data))
+
+            case 403:
+                raise err.ForbiddenError(self.__error_content(self.data))
         
-        elif self.status == 400:
-            raise err.BadRequestError(self.__error_content(self.data))
+            case 404:
+                raise err.NotFoundError(self.__error_content(self.data))
 
-        elif self.status == 401:
-            raise err.AccessDeniedError(self.__error_content(self.data))
+            case 429:
+                raise err.TooManyRequestsError(self.__error_content(self.data))
 
-        elif self.status == 403:
-            raise err.ForbiddenError(self.__error_content(self.data))
-        
-        elif self.status == 404:
-            raise err.NotFoundError(self.__error_content(self.data))
+            case 503:
+                raise err.InternalServerError(self.__error_content(self.data))
 
-        elif self.status == 429:
-            raise err.TooManyRequestsError(self.__error_content(self.data))
-
-        elif self.status == 503:
-            raise err.InternalServerError(self.__error_content(self.data))
+            case _:
+                raise err.InternalServerError(self.__error_content(self.data))
