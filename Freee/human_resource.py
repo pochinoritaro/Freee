@@ -251,7 +251,7 @@ class HumanResourse(BaseClient):
         """指定した事業所の残業申請情報を取得します。
 
         Args:
-            id (int | None, optional): 残業申請ID. Defaults to None.
+            id (int | None, optional): 残業申請ID
 
         Returns:
             FreeeResponse: 指定した事業所の残業申請情報を返します。
@@ -384,7 +384,7 @@ class HumanResourse(BaseClient):
         """指定した事業所の有給申請情報を取得します。
 
         Args:
-            id (int | None, optional): 有給申請ID. Defaults to None.
+            id (int | None, optional): 有給申請ID
 
         Returns:
             FreeeResponse: 指定した事業所の有給申請情報を返します。
@@ -519,7 +519,7 @@ class HumanResourse(BaseClient):
         """指定した事業所の特別休暇申請情報を取得します。
 
         Args:
-            id (int | None, optional): 特別休暇申請ID. Defaults to None.
+            id (int | None, optional): 特別休暇申請ID
 
         Returns:
             FreeeResponse: 指定した事業所の特別休暇申請情報を返します。
@@ -658,7 +658,7 @@ class HumanResourse(BaseClient):
         """指定した事業所の勤務時間修正申請情報を取得します。
 
         Args:
-            id (int | None, optional): 勤務時間修正申請ID. Defaults to None.
+            id (int | None, optional): 勤務時間修正申請ID
 
         Returns:
             FreeeResponse: 指定した事業所の勤務時間修正申請情報を返します。
@@ -811,9 +811,9 @@ class HumanResourse(BaseClient):
         指定した年月に支払いのある賞与明細が返されます。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員ID、年月の賞与明細を返します。
@@ -875,10 +875,10 @@ class HumanResourse(BaseClient):
         指定した年月に支払いのある賞与明細が返されます。
 
         Args:
-            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
-            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            limit (int | None, optional): 取得レコードの件数(デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
 
         Returns:
             FreeeResponse: 指定した事業所に所属する従業員の賞与明細をリストで返します。
@@ -984,12 +984,12 @@ class HumanResourse(BaseClient):
         """指定したIDの従業員を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            id (int | None, optional): 従業員ID. Defaults to None.
+            id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定したIDの従業員を返します。
@@ -1171,9 +1171,9 @@ class HumanResourse(BaseClient):
         Args:
             limit (int, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)
             offset (int, optional): 取得レコードのオフセット (デフォルト: 0)
-            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。. Defaults to None.
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
@@ -1361,10 +1361,10 @@ class HumanResourse(BaseClient):
         """指定した従業員に付与された特別休暇情報をリストで返します。
 
         Args:
-            date (str | None, optional): 対象日. Defaults to None.
-            start_date (str | None, optional): 対象開始日. Defaults to None.
-            end_date (str | None, optional): 対象終了日. Defaults to None.
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            date (str | None, optional): 対象日
+            start_date (str | None, optional): 対象開始日
+            end_date (str | None, optional): 対象終了日
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員に付与された特別休暇情報をリストで返します。
@@ -1418,12 +1418,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の銀行口座情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の銀行口座情報を返します。
@@ -1464,12 +1464,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の基本給情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の基本給情報を返します。
@@ -1503,12 +1503,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の家族情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の家族情報を返します。
@@ -1583,11 +1583,11 @@ class HumanResourse(BaseClient):
         """指定した事業所の指定日付時点における所属情報をリストで返します。
 
         Args:
-            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。. Defaults to None.
-            employee_ids (str | None, optional): 取得対象とする従業員IDを指定することができます。指定しない場合は全従業員が対象となります。(例:1,2,3,4,5). Defaults to None.
-            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
-            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
-            base_date (str | None, optional): 指定日。指定日付時点における所属情報をリストで返します。(YYYY-MM-DD). Defaults to None.
+            with_no_payroll_calculation (bool | None, optional): trueを指定すると給与計算対象外の従業員情報をレスポンスに含めます。
+            employee_ids (str | None, optional): 取得対象とする従業員IDを指定することができます。指定しない場合は全従業員が対象となります。(例:1,2,3,4,5)
+            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+            base_date (str | None, optional): 指定日。指定日付時点における所属情報をリストで返します。(YYYY-MM-DD)
 
         Returns:
             FreeeResponse: 指定した事業所の指定日付時点における所属情報をリストで返します。
@@ -1648,12 +1648,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の健康保険情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の健康保険情報を返します。
@@ -1700,12 +1700,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付のカスタム項目情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付のカスタム項目情報を返します。
@@ -1748,12 +1748,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の姓名などの情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の姓名などの情報を返します。
@@ -1811,8 +1811,8 @@ class HumanResourse(BaseClient):
         """指定した従業員・指定した打刻の詳細情報を返します。
 
         Args:
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
-            id (int | None, optional): 打刻ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
+            id (int | None, optional): 打刻ID
 
         Returns:
             FreeeResponse: 指定した従業員・指定した打刻の詳細情報を返します。
@@ -1845,11 +1845,11 @@ class HumanResourse(BaseClient):
         """指定した従業員・期間の打刻情報を返します。
 
         Args:
-            from_date (str | None, optional): 取得する打刻期間の開始日(YYYY-MM-DD)(デフォルト: 当月の打刻開始日). Defaults to None.
-            to_date (str | None, optional): 取得する打刻期間の終了日(YYYY-MM-DD)(デフォルト: 当日). Defaults to None.
-            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
-            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            from_date (str | None, optional): 取得する打刻期間の開始日(YYYY-MM-DD)(デフォルト: 当月の打刻開始日)
+            to_date (str | None, optional): 取得する打刻期間の終了日(YYYY-MM-DD)(デフォルト: 当日)
+            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・期間の打刻情報を返します。
@@ -1887,8 +1887,8 @@ class HumanResourse(BaseClient):
         例: すでに出勤した状態だと、休憩開始、退勤が配列で返ります。
 
         Args:
-            date (str | None, optional): 従業員情報を取得したい年月日(YYYY-MM-DD)(例:2018-08-01)(デフォルト：当日). Defaults to None.
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            date (str | None, optional): 従業員情報を取得したい年月日(YYYY-MM-DD)(例:2018-08-01)(デフォルト：当日)
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の打刻可能種別と打刻基準日を返します。
@@ -1918,12 +1918,12 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の厚生年金保険情報を返します。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
                 notice:
                     締日支払日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。
                     翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員・日付の厚生年金保険情報を返します。
@@ -1967,8 +1967,8 @@ class HumanResourse(BaseClient):
         """指定した従業員・日付の勤怠情報を返します。
 
         Args:
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
-            date (str | None, optional): 従業員情報を取得したい年月日(YYYY-MM-DD). Defaults to None.
+            employee_id (int | None, optional): 従業員ID
+            date (str | None, optional): 従業員情報を取得したい年月日(YYYY-MM-DD)
 
         Returns:
             FreeeResponse: 指定した従業員・日付の勤怠情報を返します。
@@ -2029,10 +2029,10 @@ class HumanResourse(BaseClient):
         """指定した従業員、月の勤怠情報のサマリを返します。
 
         Args:
-            work_records (bool | None, optional): サマリ情報に日次の勤怠情報を含める. Defaults to None.
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            work_records (bool | None, optional): サマリ情報に日次の勤怠情報を含める
+            employee_id (int | None, optional): 従業員ID
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
 
         Returns:
             FreeeResponse: 指定した従業員、月の勤怠情報のサマリを返します。
@@ -2191,9 +2191,9 @@ class HumanResourse(BaseClient):
         指定した年月に支払いのある給与明細が返されます。
 
         Args:
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
-            employee_id (int | None, optional): 従業員ID. Defaults to None.
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
+            employee_id (int | None, optional): 従業員ID
 
         Returns:
             FreeeResponse: 指定した従業員ID、年月の給与明細を返します。
@@ -2286,10 +2286,10 @@ class HumanResourse(BaseClient):
         指定した年月に支払いのある給与明細が返されます。
 
         Args:
-            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100). Defaults to None.
-            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0). Defaults to None.
-            year (int | None, optional): 従業員情報を取得したい年. Defaults to None.
-            month (int | None, optional): 従業員情報を取得したい月. Defaults to None.
+            limit (int | None, optional): 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)
+            offset (int | None, optional): 取得レコードのオフセット (デフォルト: 0)
+            year (int | None, optional): 従業員情報を取得したい年
+            month (int | None, optional): 従業員情報を取得したい月
 
         Returns:
             FreeeResponse: 指定した事業所に所属する従業員の給与明細をリストで返します。
@@ -2384,7 +2384,7 @@ class HumanResourse(BaseClient):
         年末調整対象外の従業員は、本人情報、給与・賞与、前職情報のみが取得できます。
 
         Args:
-            year (int | None, optional): 年末調整を取得したい年. Defaults to None.
+            year (int | None, optional): 年末調整を取得したい年
             employee_id (int | None, optional): 従業員ID
 
         Returns:
