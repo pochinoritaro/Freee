@@ -19,7 +19,7 @@ class HumanResourse(BaseClient):
         endpoint_url = f"./approval_flow_routes/{id}"
         return self.api_call(method="GET", endpoint_url=endpoint_url)
 
-#TODO ここまで実装済(2024/02/22)
+
     def get_approval_flow_routes(
         self,
         included_user_id: int|None=None,
@@ -270,9 +270,7 @@ class HumanResourse(BaseClient):
         self,
         limit: int=50, 
         offset: int=0, 
-        with_no_payroll_calculation: bool|None=None,
-        #TODO *,
-        #TODO company_id: int|None=None
+        with_no_payroll_calculation: bool|None=None
         ) -> FreeeResponse:
         endpoint_url = f"./companies/{self.company_id}/employees"
         query = dict(
