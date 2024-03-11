@@ -3,7 +3,7 @@ from urllib.parse import urljoin, urlencode
 
 def _remove_none_values(d: dict) -> dict:
     if isinstance(d, dict):
-        return {k: dumps(v) for k, v in d.items() if v is not None}
+        return {k: dumps(v) if isinstance(v, bool) else v for k, v in d.items() if v is not None}
     else:
         return {}
 
